@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NaHCO₃ — Elite Swimming Intelligence</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #080c10;
+  --surface: #0d1218;
+  --surface2: #131b24;
+  --border: rgba(255,255,255,0.07);
+  --accent: #00d4ff;
+  --accent2: #ff6b35;
+  --accent3: #a8ff78;
+  --text: #e8edf2;
+  --text-dim: #6b7d8f;
+  --text-mid: #9aacbc;
+  --danger: #ff4757;
+  --warning: #ffd32a;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── BACKGROUND GRID ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── SPLASH ── */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 24px;
+  z-index: 1000;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+#splash.out { opacity: 0; transform: scale(0.97); pointer-events: none; }
+
+.splash-formula {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(48px, 8vw, 96px);
+  color: var(--accent);
+  letter-spacing: -2px;
+  animation: glow 3s ease-in-out infinite;
+}
+@keyframes glow {
+  0%,100% { text-shadow: 0 0 20px rgba(0,212,255,0.3), 0 0 60px rgba(0,212,255,0.1); }
+  50% { text-shadow: 0 0 40px rgba(0,212,255,0.6), 0 0 100px rgba(0,212,255,0.3); }
+}
+.splash-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+.splash-enter {
+  margin-top: 16px;
+  padding: 14px 40px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.splash-enter::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--accent);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: -1;
+}
+.splash-enter:hover { color: var(--bg); }
+.splash-enter:hover::before { transform: translateX(0); }
+
+/* ── LAYOUT ── */
+#app { position: relative; z-index: 1; display: none; }
+#app.visible { display: block; }
+
+/* ── HEADER ── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8,12,16,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+.logo {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  color: var(--accent);
+  letter-spacing: 2px;
+}
+nav {
+  display: flex;
+  gap: 4px;
+}
+.nav-btn {
+  padding: 8px 16px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+.nav-btn:hover { color: var(--text); background: var(--surface); }
+.nav-btn.active { color: var(--accent); background: rgba(0,212,255,0.08); }
+
+/* ── SECTIONS ── */
+.section {
+  display: none;
+  animation: fadeIn 0.5s ease;
+  min-height: calc(100vh - 60px);
+}
+.section.active { display: block; }
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HERO (OVERVIEW) ── */
+.hero {
+  padding: 80px 48px 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.hero-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1.1;
+  color: var(--text);
+  margin-bottom: 24px;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--accent);
+}
+.hero-lead {
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--text-mid);
+  max-width: 680px;
+  margin-bottom: 56px;
+}
+
+/* ── STAT CARDS ── */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 64px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--card-accent, var(--accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+.stat-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-2px); }
+.stat-card:hover::before { transform: scaleX(1); }
+.stat-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 42px;
+  line-height: 1;
+  margin-bottom: 8px;
+  color: var(--card-accent, var(--accent));
+}
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.stat-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* ── MECHANISM VISUALIZATION ── */
+.mechanism-viz {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 40px;
+  margin-bottom: 48px;
+}
+.mech-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.mech-flow {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.mech-step {
+  flex: 1;
+  min-width: 140px;
+  text-align: center;
+  padding: 20px 16px;
+  position: relative;
+}
+.mech-icon {
+  font-size: 28px;
+  margin-bottom: 12px;
+  display: block;
+}
+.mech-step-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.mech-step-text {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.mech-arrow {
+  font-size: 20px;
+  color: var(--border);
+  flex-shrink: 0;
+  padding: 0 8px;
+  animation: pulse-arrow 2s ease-in-out infinite;
+}
+@keyframes pulse-arrow {
+  0%,100% { color: rgba(0,212,255,0.2); }
+  50% { color: rgba(0,212,255,0.6); }
+}
+
+/* ── CONTENT GRID ── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px 80px;
+}
+@media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
+.content-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+}
+.content-card h3 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.content-card p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--text-mid);
+  margin-bottom: 12px;
+}
+.content-card p:last-child { margin-bottom: 0; }
+
+/* ── EVIDENCE SECTION ── */
+.evidence-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 48px;
+}
+.section-header {
+  margin-bottom: 48px;
+}
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.section-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.15;
+}
+.section-desc {
+  margin-top: 16px;
+  font-size: 15px;
+  color: var(--text-mid);
+  max-width: 600px;
+  line-height: 1.7;
+}
+
+/* ── DEBATE CARDS ── */
+.debate-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 32px;
+}
+.debate-side {
+  padding: 32px;
+  background: var(--surface);
+}
+.debate-side.pro { border-left: 3px solid var(--accent3); }
+.debate-side.con { border-left: 3px solid var(--danger); }
+.debate-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.debate-side.pro .debate-label { color: var(--accent3); }
+.debate-side.con .debate-label { color: var(--danger); }
+.debate-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  animation: slideIn 0.4s ease both;
+}
+.debate-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.pro .debate-dot { background: var(--accent3); }
+.con .debate-dot { background: var(--danger); }
+.debate-text {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-mid);
+}
+.debate-text strong { color: var(--text); font-weight: 600; }
+
+/* ── PROTOCOL SECTION ── */
+.protocol-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 48px;
+}
+.protocol-timeline {
+  position: relative;
+  padding-left: 32px;
+  margin-bottom: 48px;
+}
+.protocol-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--accent), rgba(0,212,255,0.1));
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 32px;
+  padding: 24px 28px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+.timeline-item:hover { border-color: rgba(0,212,255,0.3); transform: translateX(4px); }
+.timeline-dot {
+  position: absolute;
+  left: -36px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 12px rgba(0,212,255,0.4);
+}
+.timeline-time {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.timeline-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.timeline-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* ── DOSING CALCULATOR ── */
+.calc-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px;
+  margin-bottom: 32px;
+}
+.calc-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+.calc-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+.calc-field label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.calc-field input, .calc-field select {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 16px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  transition: border-color 0.2s;
+  outline: none;
+  appearance: none;
+}
+.calc-field input:focus, .calc-field select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.08);
+}
+.calc-result {
+  background: rgba(0,212,255,0.06);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 8px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+.result-item { text-align: center; }
+.result-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 32px;
+  color: var(--accent);
+  display: block;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.result-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+.risk-bar {
+  margin-top: 20px;
+  padding: 16px 20px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+.risk-low { background: rgba(168,255,120,0.08); border: 1px solid rgba(168,255,120,0.2); color: var(--accent3); }
+.risk-med { background: rgba(255,211,42,0.08); border: 1px solid rgba(255,211,42,0.2); color: var(--warning); }
+.risk-high { background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.2); color: var(--danger); }
+
+/* ── DISTANCE MATRIX ── */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.matrix-cell {
+  padding: 16px 8px;
+  border-radius: 6px;
+  text-align: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.matrix-cell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.matrix-cell:hover::after { opacity: 0.1; }
+.matrix-none { background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.2); color: var(--danger); }
+.matrix-low { background: rgba(255,211,42,0.08); border: 1px solid rgba(255,211,42,0.2); color: var(--warning); }
+.matrix-high { background: rgba(168,255,120,0.08); border: 1px solid rgba(168,255,120,0.2); color: var(--accent3); }
+.matrix-none::after { background: var(--danger); }
+.matrix-low::after { background: var(--warning); }
+.matrix-high::after { background: var(--accent3); }
+.matrix-label { font-size: 13px; margin-bottom: 4px; font-weight: 600; }
+.matrix-sub { font-size: 9px; color: inherit; opacity: 0.7; }
+.matrix-detail {
+  padding: 20px 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  min-height: 80px;
+  transition: all 0.3s;
+}
+
+/* ── RESEARCHERS ── */
+.researcher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.researcher-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.researcher-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,212,255,0.05), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.researcher-card:hover { border-color: rgba(0,212,255,0.3); transform: translateY(-2px); }
+.researcher-card:hover::before { opacity: 1; }
+.researcher-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+.researcher-inst {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.researcher-stance {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-family: 'DM Mono', monospace;
+  margin-bottom: 14px;
+}
+.stance-pro { background: rgba(168,255,120,0.1); color: var(--accent3); border: 1px solid rgba(168,255,120,0.2); }
+.stance-nuanced { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+.stance-skeptical { background: rgba(255,211,42,0.1); color: var(--warning); border: 1px solid rgba(255,211,42,0.2); }
+.researcher-bio {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.researcher-card.expanded .researcher-bio {
+  display: block;
+  -webkit-line-clamp: unset;
+}
+.expand-btn {
+  margin-top: 12px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  padding: 0;
+}
+
+/* ── GAPS & UNKNOWNS ── */
+.gaps-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.gap-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.gap-card:hover { border-color: rgba(255,107,53,0.4); transform: translateY(-2px); }
+.gap-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--accent2);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
+.gap-card:hover::before { transform: scaleX(1); }
+.gap-icon { font-size: 24px; margin-bottom: 12px; }
+.gap-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.gap-text {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* ── COACH FRAMEWORK ── */
+.framework-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px 48px;
+}
+.decision-tree {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 36px;
+  margin-bottom: 32px;
+}
+.tree-question {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 16px;
+  color: var(--text);
+}
+.tree-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.tree-option {
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  color: var(--text-mid);
+  background: var(--bg);
+}
+.tree-option:hover { border-color: var(--accent); color: var(--text); background: rgba(0,212,255,0.05); }
+.tree-option.selected { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08); }
+.tree-result {
+  margin-top: 20px;
+  padding: 20px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.7;
+  display: none;
+  animation: fadeIn 0.4s ease;
+}
+.result-proceed { background: rgba(168,255,120,0.08); border: 1px solid rgba(168,255,120,0.25); color: var(--accent3); }
+.result-caution { background: rgba(255,211,42,0.08); border: 1px solid rgba(255,211,42,0.25); color: var(--warning); }
+.result-stop { background: rgba(255,71,87,0.08); border: 1px solid rgba(255,71,87,0.25); color: var(--danger); }
+
+/* ── KEY PRINCIPLES ── */
+.principles-list {
+  counter-reset: principle;
+}
+.principle-item {
+  display: flex;
+  gap: 24px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  counter-increment: principle;
+  align-items: flex-start;
+}
+.principle-item:last-child { border-bottom: none; }
+.principle-num {
+  font-family: 'DM Serif Display', serif;
+  font-size: 48px;
+  color: rgba(0,212,255,0.15);
+  line-height: 1;
+  flex-shrink: 0;
+  width: 60px;
+  text-align: right;
+}
+.principle-content {}
+.principle-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+.principle-text {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.8;
+}
+
+/* ── TABS ── */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+.tab-btn {
+  padding: 12px 24px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: -1px;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; animation: fadeIn 0.3s ease; }
+.tab-content.active { display: block; }
+
+/* ── QUOTE BLOCK ── */
+.insight-block {
+  border-left: 3px solid var(--accent);
+  padding: 20px 24px;
+  background: rgba(0,212,255,0.04);
+  border-radius: 0 6px 6px 0;
+  margin: 24px 0;
+}
+.insight-text {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.insight-source {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── UTILITY ── */
+.tag {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-right: 6px;
+  margin-bottom: 6px;
+}
+.tag-blue { background: rgba(0,212,255,0.1); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+.tag-orange { background: rgba(255,107,53,0.1); color: var(--accent2); border: 1px solid rgba(255,107,53,0.2); }
+.tag-green { background: rgba(168,255,120,0.1); color: var(--accent3); border: 1px solid rgba(168,255,120,0.2); }
+.tag-red { background: rgba(255,71,87,0.1); color: var(--danger); border: 1px solid rgba(255,71,87,0.2); }
+
+.divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ── TOOLTIP ── */
+.tooltip-wrap { position: relative; display: inline-block; }
+.tooltip-wrap .tt {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1a2535;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: var(--text-mid);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  z-index: 50;
+}
+.tooltip-wrap:hover .tt { opacity: 1; }
+
+/* ── PROGRESS BAR ── */
+.evidence-bar-wrap { margin-bottom: 16px; }
+.evidence-bar-label {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 12px;
+  color: var(--text-mid);
+}
+.evidence-bar-label span:last-child {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+}
+.evidence-bar-track {
+  height: 4px;
+  background: var(--surface2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.evidence-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 0;
+}
+.evidence-bar-fill.animate { width: var(--w); }
+
+/* ── GI RISK METER ── */
+.meter-track {
+  height: 12px;
+  background: linear-gradient(to right, var(--accent3), var(--warning), var(--danger));
+  border-radius: 6px;
+  position: relative;
+  margin: 16px 0 8px;
+}
+.meter-needle {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 20px;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  transition: left 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-formula">NaHCO₃</div>
+  <div class="splash-sub">Elite Swimming Intelligence System</div>
+  <button class="splash-enter" onclick="enterApp()">Enter →</button>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <header>
+    <div class="logo">NaHCO₃ // INTEL</div>
+    <nav>
+      <button class="nav-btn active" onclick="showSection('overview', this)">Overview</button>
+      <button class="nav-btn" onclick="showSection('evidence', this)">Evidence</button>
+      <button class="nav-btn" onclick="showSection('protocol', this)">Protocol</button>
+      <button class="nav-btn" onclick="showSection('debates', this)">Debates</button>
+      <button class="nav-btn" onclick="showSection('researchers', this)">Researchers</button>
+      <button class="nav-btn" onclick="showSection('gaps', this)">Open Questions</button>
+      <button class="nav-btn" onclick="showSection('framework', this)">Coach Framework</button>
+    </nav>
+  </header>
+
+  <!-- ══════════════════════════════════════ OVERVIEW ══════════════════════════════════════ -->
+  <section id="overview" class="section active">
+    <div class="hero">
+      <div class="hero-eyebrow">// Sodium Bicarbonate in Elite Swimming</div>
+      <h1 class="hero-title">The supplement the<br>evidence actually <em>supports</em></h1>
+      <p class="hero-lead">A deep intelligence brief on NaHCO₃ — its mechanism, evidence base, key debates, unresolved questions, and what a sophisticated coaching program actually does with it. Includes analysis of Bob Bowman's practitioner critique.</p>
+
+      <div class="stat-grid">
+        <div class="stat-card" style="--card-accent: var(--accent)">
+          <div class="stat-num">1.3%</div>
+          <div class="stat-label">Avg. Performance Gain</div>
+          <div class="stat-sub">200–400m events. Small in absolute terms, decisive at elite level.</div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--accent3)">
+          <div class="stat-num">0.3</div>
+          <div class="stat-label">g/kg Optimal Dose</div>
+          <div class="stat-sub">The field's consensus number. Below 0.2 unreliable; above adds GI risk, not benefit.</div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--warning)">
+          <div class="stat-num">60–180</div>
+          <div class="stat-label">min to Peak pH</div>
+          <div class="stat-sub">Individual variation is the single most important practical variable.</div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--accent2)">
+          <div class="stat-num">~30%</div>
+          <div class="stat-label">GI Distress Rate</div>
+          <div class="stat-sub">Meaningful proportion experience symptoms that can eliminate any gain.</div>
+        </div>
+        <div class="stat-card" style="--card-accent: var(--danger)">
+          <div class="stat-num">~20%</div>
+          <div class="stat-label">Studies Include Women</div>
+          <div class="stat-sub">A severe evidence gap. Female response may differ significantly.</div>
+        </div>
+      </div>
+
+      <div class="mechanism-viz">
+        <div class="mech-title">// The Core Mechanism</div>
+        <div class="mech-flow">
+          <div class="mech-step">
+            <span class="mech-icon">💊</span>
+            <div class="mech-step-title">Ingestion</div>
+            <div class="mech-step-text">0.3 g/kg NaHCO₃ taken 60–180 min pre-race. Blood bicarbonate pool rises.</div>
+          </div>
+          <div class="mech-arrow">→</div>
+          <div class="mech-step">
+            <span class="mech-icon">🩸</span>
+            <div class="mech-step-title">Alkalosis</div>
+            <div class="mech-step-text">Blood pH rises from ~7.4 to 7.5+. Extracellular buffering capacity increases.</div>
+          </div>
+          <div class="mech-arrow">→</div>
+          <div class="mech-step">
+            <span class="mech-icon">🏊</span>
+            <div class="mech-step-title">Exercise</div>
+            <div class="mech-step-text">Glycolysis produces H⁺. Steeper concentration gradient accelerates efflux from muscle.</div>
+          </div>
+          <div class="mech-arrow">→</div>
+          <div class="mech-step">
+            <span class="mech-icon">⚡</span>
+            <div class="mech-step-title">Delayed Fatigue</div>
+            <div class="mech-step-text">Intracellular pH stays higher longer. Enzyme function preserved. Fatigue postponed.</div>
+          </div>
+          <div class="mech-arrow">→</div>
+          <div class="mech-step">
+            <span class="mech-icon">🏆</span>
+            <div class="mech-step-title">Performance</div>
+            <div class="mech-step-text">~1.3% faster in 200–400m. In elite racing, often the margin that determines outcomes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <h3>Why it matters for coaches</h3>
+        <p>Unlike most supplements, sodium bicarbonate has a well-characterized mechanism, a decade of consistent evidence at the category level, and IOC endorsement. It sits in a small group of legal ergogenic aids that have cleared the bar of scientific credibility.</p>
+        <p>The evidence says it works for 200m and 400m events. The question for a sophisticated program is not whether to consider it — it's whether a specific athlete, in a specific context, meets the conditions under which the average effect becomes a reliable individual benefit.</p>
+        <div style="margin-top: 16px">
+          <span class="tag tag-green">IOC Endorsed</span>
+          <span class="tag tag-blue">Legal</span>
+          <span class="tag tag-blue">Mechanism Established</span>
+          <span class="tag tag-orange">GI Risk</span>
+        </div>
+      </div>
+      <div class="content-card">
+        <h3>The leverage framing</h3>
+        <p>Think of bicarbonate as borrowing physiological capacity from before the race to spend during it. The pre-race alkalosis is the loan. The race is the expenditure. Like any leverage, it amplifies outcomes in both directions.</p>
+        <p>This clarifies when it makes sense: high-stakes competition, well-prepared athlete, validated individual response. It does not make sense for development training, athletes who haven't validated their response, or contexts where GI failure would be catastrophic.</p>
+        <div class="insight-block" style="margin-top: 20px; margin-bottom: 0">
+          <div class="insight-text">"The question is never whether bicarbonate works — it's whether this is the right moment to borrow against physiology."</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ EVIDENCE ══════════════════════════════════════ -->
+  <section id="evidence" class="section">
+    <div class="evidence-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// The Evidence Base</div>
+        <h2 class="section-title">What the research<br>actually shows</h2>
+        <p class="section-desc">A clear-eyed assessment of where the evidence is strong, where it's weak, and where it's been misread.</p>
+      </div>
+
+      <div class="tab-bar">
+        <button class="tab-btn active" onclick="showTab('ev-strength', this)">Evidence Strength</button>
+        <button class="tab-btn" onclick="showTab('ev-distance', this)">Distance Matrix</button>
+        <button class="tab-btn" onclick="showTab('ev-critique', this)">Critical Limitations</button>
+      </div>
+
+      <div id="ev-strength" class="tab-content active">
+        <div style="max-width: 640px; margin-bottom: 40px">
+          <p style="color: var(--text-mid); font-size: 14px; line-height: 1.8; margin-bottom: 24px">Evidence quality rated across key claims. The headline 1.3% figure is real but rests on a methodologically mixed literature. Confidence intervals narrow considerably when you restrict to elite athletes and competition conditions.</p>
+
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Mechanism (H⁺ buffering)</span><span>Very High</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 92%; background: var(--accent3)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Benefit in 200–400m (trained)</span><span>Moderate–High</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 72%; background: var(--accent)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Benefit in repeat sprint training</span><span>Moderate</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 58%; background: var(--accent)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Benefit in elite athletes specifically</span><span>Low–Moderate</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 38%; background: var(--warning)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Benefit in women (female-specific data)</span><span>Low</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 28%; background: var(--warning)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Long-term training adaptation benefit</span><span>Very Low</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 14%; background: var(--danger)"></div></div>
+          </div>
+          <div class="evidence-bar-wrap">
+            <div class="evidence-bar-label"><span>Competition-condition validity</span><span>Near Zero</span></div>
+            <div class="evidence-bar-track"><div class="evidence-bar-fill animate" style="--w: 8%; background: var(--danger)"></div></div>
+          </div>
+        </div>
+
+        <div class="insight-block">
+          <div class="insight-text">"The field treats laboratory time-trial findings as direct evidence for competition benefit. This is an inference, not a demonstrated fact. Competition physiology differs from lab physiology in ways that are well-established and uncorrected for."</div>
+          <div class="insight-source">// Critical synthesis from evidence review</div>
+        </div>
+      </div>
+
+      <div id="ev-distance" class="tab-content">
+        <p style="color: var(--text-dim); font-size: 13px; margin-bottom: 24px; font-family: 'DM Mono', monospace; letter-spacing: 1px; text-transform: uppercase">Click an event to see evidence summary</p>
+        <div class="matrix-grid" id="distanceMatrix">
+          <div class="matrix-cell matrix-none" onclick="showDistDetail(this, '50m', 'none')">
+            <div class="matrix-label">50m</div>
+            <div class="matrix-sub">~22–28s</div>
+          </div>
+          <div class="matrix-cell matrix-low" onclick="showDistDetail(this, '100m', 'low')">
+            <div class="matrix-label">100m</div>
+            <div class="matrix-sub">~46–58s</div>
+          </div>
+          <div class="matrix-cell matrix-high" onclick="showDistDetail(this, '200m', 'high')">
+            <div class="matrix-label">200m</div>
+            <div class="matrix-sub">~1:45–2:00</div>
+          </div>
+          <div class="matrix-cell matrix-high" onclick="showDistDetail(this, '400m', 'high')">
+            <div class="matrix-label">400m</div>
+            <div class="matrix-sub">~3:40–4:30</div>
+          </div>
+          <div class="matrix-cell matrix-low" onclick="showDistDetail(this, '800m+', 'low')">
+            <div class="matrix-label">800m+</div>
+            <div class="matrix-sub">&gt;8 min</div>
+          </div>
+        </div>
+        <div class="matrix-detail" id="distDetail">
+          Select an event above to see the evidence summary for that distance.
+        </div>
+
+        <div style="margin-top: 32px">
+          <div style="display: flex; gap: 16px; flex-wrap: wrap">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim)">
+              <div style="width: 12px; height: 12px; border-radius: 2px; background: rgba(168,255,120,0.3)"></div>
+              Strong evidence of benefit
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim)">
+              <div style="width: 12px; height: 12px; border-radius: 2px; background: rgba(255,211,42,0.3)"></div>
+              Mixed / borderline evidence
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-dim)">
+              <div style="width: 12px; height: 12px; border-radius: 2px; background: rgba(255,71,87,0.3)"></div>
+              No reliable evidence of benefit
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="ev-critique" class="tab-content">
+        <div class="content-grid" style="padding: 0">
+          <div class="content-card">
+            <h3>The blinding problem</h3>
+            <p>Most bicarbonate studies are nominally "double-blind" but functionally single-blind. Athletes frequently know they've received the active treatment due to GI sensations, taste, and physiological awareness. Expectancy alone can drive performance improvements of 1–2% — precisely the magnitude bicarbonate produces.</p>
+            <p>One recent study using an "ergolytic" framing showed expectancy substantially altered outcomes even when the substance was identical across conditions. The true pharmacological contribution may be materially smaller than reported literature suggests.</p>
+          </div>
+          <div class="content-card">
+            <h3>The small-sample problem</h3>
+            <p>The characteristic bicarbonate study uses 6–10 participants. Meta-analyses pool these studies but don't solve the small-sample problem — they aggregate it. The 1.3% figure has the appearance of precision that its underlying data doesn't warrant.</p>
+            <p>Publication bias compounds this: null results are systematically less likely to be published. Funnel plot asymmetry in the meta-analyses suggests the true average effect size is smaller than what appears in the literature.</p>
+          </div>
+          <div class="content-card">
+            <h3>The population gap</h3>
+            <p>The entire evidence base is built on moderately trained athletes. Elite swimmers have spent years specifically developing the buffering systems bicarbonate is supposed to augment. Whether exogenous bicarbonate produces meaningful marginal gains on top of highly trained acid-base regulation is genuinely unknown.</p>
+            <p>Studies that do include elite athletes produce inconsistent results. The extrapolation from college-level time trials to Olympic-level competition is an inference the field makes with more confidence than the data supports.</p>
+          </div>
+          <div class="content-card">
+            <h3>The mechanism assumption</h3>
+            <p>The consensus story — H⁺ buffering delays acidosis-driven fatigue — is elegant but increasingly contested. Westerblad's muscle physiology work has demonstrated that inorganic phosphate accumulation and calcium handling disruption may be more important than H⁺ in contractile failure.</p>
+            <p>If the mechanism is wrong or incomplete, optimizing use based on the acid-base rationale is working from an incorrect map. Bicarbonate may work through partially different pathways than the field assumes — including central/perceptual effects that are almost entirely uninvestigated.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ PROTOCOL ══════════════════════════════════════ -->
+  <section id="protocol" class="section">
+    <div class="protocol-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// Practical Protocol</div>
+        <h2 class="section-title">Implementation<br>for elite programs</h2>
+        <p class="section-desc">Evidence-based guidance on dosing, timing, delivery, and the individualization process that separates sophisticated use from naive application.</p>
+      </div>
+
+      <!-- DOSING CALCULATOR -->
+      <div class="calc-card">
+        <div class="calc-title">// Dose Calculator</div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Athlete Body Weight (kg)</label>
+            <input type="number" id="bodyWeight" placeholder="e.g. 75" oninput="calcDose()" min="40" max="120">
+          </div>
+          <div class="calc-field">
+            <label>GI Tolerance (from training trials)</label>
+            <select id="giTolerance" onchange="calcDose()">
+              <option value="">— Select —</option>
+              <option value="good">Good (no prior issues)</option>
+              <option value="moderate">Moderate (mild symptoms)</option>
+              <option value="poor">Poor (significant symptoms)</option>
+              <option value="unknown">Unknown (untested)</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-row">
+          <div class="calc-field">
+            <label>Event Distance</label>
+            <select id="eventDist" onchange="calcDose()">
+              <option value="">— Select —</option>
+              <option value="50">50m</option>
+              <option value="100">100m</option>
+              <option value="200">200m</option>
+              <option value="400">400m</option>
+              <option value="800">800m+</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Individual Peak Time (if known)</label>
+            <select id="peakTime" onchange="calcDose()">
+              <option value="">— Unknown / Not Yet Tested —</option>
+              <option value="60">~60 minutes (fast absorber)</option>
+              <option value="90">~90 minutes (average)</option>
+              <option value="120">~120 minutes</option>
+              <option value="150">~150+ minutes (slow absorber)</option>
+            </select>
+          </div>
+        </div>
+        <div id="calcOutput" style="display:none">
+          <div class="calc-result">
+            <div class="result-item">
+              <span class="result-num" id="doseGrams">—</span>
+              <div class="result-label">Grams NaHCO₃</div>
+            </div>
+            <div class="result-item">
+              <span class="result-num" id="ingestTime">—</span>
+              <div class="result-label">Min Pre-Race</div>
+            </div>
+            <div class="result-item">
+              <span class="result-num" id="expectedGain">—</span>
+              <div class="result-label">Expected Gain</div>
+            </div>
+          </div>
+          <div id="riskNote" class="risk-bar" style="margin-top: 16px"></div>
+        </div>
+        <p style="font-size: 11px; color: var(--text-dim); margin-top: 16px; font-family: 'DM Mono', monospace">* Calculator provides guidance estimates. Always validate with individual training trials before competition use.</p>
+      </div>
+
+      <!-- GI RISK METER -->
+      <div class="content-card" style="margin-bottom: 32px">
+        <h3 style="margin-bottom: 20px">GI Risk by Delivery Format</h3>
+        <p style="font-size: 13px; color: var(--text-dim); margin-bottom: 24px; line-height: 1.7">The delivery format significantly affects GI tolerance without necessarily changing efficacy. Hover/click each option to see risk level.</p>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px">
+          <div class="matrix-cell" style="cursor:pointer; background: rgba(255,71,87,0.1); border-color: rgba(255,71,87,0.3)" onclick="setMeter(85, 'NaHCO₃ in water solution — fastest absorption, highest GI risk. Most studies use this format.')">
+            <div class="matrix-label" style="color: var(--danger)">Solution</div>
+            <div class="matrix-sub" style="color: var(--danger)">Highest risk</div>
+          </div>
+          <div class="matrix-cell" style="cursor:pointer; background: rgba(255,211,42,0.08); border-color: rgba(255,211,42,0.3)" onclick="setMeter(55, 'Taken with a carbohydrate-rich meal slows absorption, reduces GI distress, slightly delays peak. Good compromise.')">
+            <div class="matrix-label" style="color: var(--warning)">With Food</div>
+            <div class="matrix-sub" style="color: var(--warning)">Moderate risk</div>
+          </div>
+          <div class="matrix-cell" style="cursor:pointer; background: rgba(0,212,255,0.08); border-color: rgba(0,212,255,0.3)" onclick="setMeter(40, 'Split dose over 30–60 minutes reduces peak GI load. Effective for athletes with moderate tolerance issues.')">
+            <div class="matrix-label" style="color: var(--accent)">Split Dose</div>
+            <div class="matrix-sub" style="color: var(--accent)">Lower risk</div>
+          </div>
+          <div class="matrix-cell" style="cursor:pointer; background: rgba(168,255,120,0.08); border-color: rgba(168,255,120,0.3)" onclick="setMeter(22, 'Enteric-coated capsules bypass stomach, slower and more variable absorption. Lowest GI risk but peak timing harder to control.')">
+            <div class="matrix-label" style="color: var(--accent3)">Capsules</div>
+            <div class="matrix-sub" style="color: var(--accent3)">Lowest risk</div>
+          </div>
+        </div>
+        <div class="meter-track" style="margin-top: 20px">
+          <div class="meter-needle" id="meterNeedle" style="left: 50%"></div>
+        </div>
+        <div class="meter-labels">
+          <span>Low GI Risk</span>
+          <span>High GI Risk</span>
+        </div>
+        <div id="meterNote" style="margin-top: 12px; font-size: 12px; color: var(--text-dim); line-height: 1.6; min-height: 36px; transition: all 0.3s">
+          Click a delivery format above to see the risk profile.
+        </div>
+      </div>
+
+      <!-- TIMING TIMELINE -->
+      <div class="section-header" style="margin-top: 48px">
+        <div class="section-eyebrow">// Race Day Timeline</div>
+        <h3 style="font-family: 'DM Serif Display', serif; font-size: 28px">The 3-hour window</h3>
+      </div>
+      <div class="protocol-timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">T – 3h to T – 2h</div>
+          <div class="timeline-title">Standardized Pre-Load Meal</div>
+          <div class="timeline-desc">Low-fiber, familiar carbohydrate meal. No new foods. This is not the time for experimentation. Hydration established.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">T – [Individual Peak Time]</div>
+          <div class="timeline-title">NaHCO₃ Ingestion</div>
+          <div class="timeline-desc">0.3 g/kg with 500–750mL water. Timing determined by individual peak-time protocol established in training trials — not a generic recommendation. Range: 60–180 min.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">T – 45 to T – 30min</div>
+          <div class="timeline-title">Monitor & Confirm</div>
+          <div class="timeline-desc">Athlete should confirm absence of significant GI distress. If moderate symptoms: proceed with awareness. If severe symptoms: contingency — the race strategy shifts to unassisted performance.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">T – 20min</div>
+          <div class="timeline-title">Warm-Up</div>
+          <div class="timeline-desc">Standard race warm-up. If everything is on schedule and GI status is clear, blood bicarbonate should be approaching or at peak. This is the intended physiological state entering competition.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-time">T – 0</div>
+          <div class="timeline-title">Race</div>
+          <div class="timeline-desc">Peak alkalotic state deployed. H⁺ efflux enhanced. The biological loan is now being spent. Performance delta: aim for 1–2% improvement in 200–400m events relative to baseline.</div>
+        </div>
+      </div>
+
+      <!-- INDIVIDUALIZATION PROTOCOL -->
+      <div class="content-card" style="margin-top: 16px">
+        <h3>The Individualization Protocol — Non-Negotiable</h3>
+        <p>The single most important insight from the research that most programs skip: individual time-to-peak blood bicarbonate varies from 60 to 180+ minutes. An athlete who peaks at 90 minutes and takes it 60 minutes before a race is competing in a declining alkalotic state, not a peak one.</p>
+        <p><strong style="color: var(--text)">Minimum protocol before any competition use:</strong> 3–5 training sessions at competition intensity using 0.3 g/kg, with varied ingestion timing (60, 90, 120 min), tracking both GI response and perceived exertion during the set. Establish individual peak window. Establish GI tolerance threshold. Only then commit to a competition timing.</p>
+        <p>This isn't optional refinement. It's the difference between using bicarbonate intelligently and using it naively.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ DEBATES ══════════════════════════════════════ -->
+  <section id="debates" class="section">
+    <div class="evidence-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// Active Debates</div>
+        <h2 class="section-title">The real<br>disagreements</h2>
+        <p class="section-desc">Where serious researchers and coaches actually disagree — not the caricatured version, but the strongest arguments on each side.</p>
+      </div>
+
+      <div style="margin-bottom: 16px">
+        <div class="tab-bar">
+          <button class="tab-btn active" onclick="showTab('d1',this)">Elite Efficacy</button>
+          <button class="tab-btn" onclick="showTab('d2',this)">GI Problem</button>
+          <button class="tab-btn" onclick="showTab('d3',this)">Training Use</button>
+          <button class="tab-btn" onclick="showTab('d4',this)">Beta-Alanine Stack</button>
+          <button class="tab-btn" onclick="showTab('d5',this)">Youth Athletes</button>
+          <button class="tab-btn" onclick="showTab('d6',this)">Bowman's Lens</button>
+        </div>
+      </div>
+
+      <div id="d1" class="tab-content active">
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">For elite use</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Marginal gains matter more at elite level.</strong> A 1.3% improvement in a 200m race can determine whether an athlete makes a final or misses it. The asymmetry of stakes justifies use even at lower reliability.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>IOC and ISSN endorsement</strong> reflects serious review by experts who have assessed the evidence specifically for high-performance athletes. The institutional weight of that consensus should carry something.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>The cost of not using it</strong> — if competitors are using bicarbonate effectively, not using it is itself a competitive decision with a cost. The asymmetry cuts both ways.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">Against / Skeptical</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Elite athletes are absent from the evidence base.</strong> Studies use moderately trained college swimmers. Elite swimmers have spent years developing the very systems bicarbonate is supposed to augment. The marginal gain is likely smaller.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>When studies do include elite athletes, results become inconsistent.</strong> The extrapolation from college-level time trials to Olympic finals is an inference, not a demonstrated finding.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>GI failure risk is higher in real competition</strong> than in laboratory conditions. The probability of catastrophic GI distress in an Olympic final — with elevated cortisol, different pre-race nutrition — is not captured by controlled studies.</div></div>
+          </div>
+        </div>
+        <div class="insight-block">
+          <div class="insight-text">"The honest verdict: use it at elite level, but hold your confidence in the magnitude of benefit loosely. The evidence supports trying it — not guaranteeing it."</div>
+        </div>
+      </div>
+
+      <div id="d2" class="tab-content">
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">GI is manageable</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Protocol optimization significantly reduces distress.</strong> Splitting doses, taking with food, using capsules, and individualized timing all demonstrably reduce GI symptoms. The problem is real but solvable with expertise.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Most athletes who tolerate it well</strong> had access to proper individualization protocols. The high dropout rate reflects naive application, not an inherent property of the supplement.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">GI is a fundamental barrier</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Protocols reduce GI risk but don't eliminate it.</strong> Even with optimized delivery, a meaningful proportion of athletes experience symptoms. In competition, even reduced risk of GI failure is a serious cost.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Researchers underweight GI severity</strong> because they study lab settings. Acute diarrhea during a race isn't "losing 1.3%." It's potentially losing everything in a non-repeatable high-stakes event.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Trialling in training doesn't build tolerance.</strong> Siegler's research showed GI symptoms remained inconsistent across repeated trials — exposure doesn't necessarily habituate the gut to the stress.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="d3" class="tab-content">
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">Use in training</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Higher training loads possible.</strong> If bicarbonate allows athletes to sustain greater intensity or volume in key training sessions, the total adaptive stimulus may be larger, producing superior long-term gains.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Some research suggests enhanced PGC-1α expression</strong> post-exercise with bicarbonate, pointing toward enhanced mitochondrial adaptation — the opposite of blunting adaptation.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">Training use may backfire</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Metabolic acidosis is part of the adaptive signal.</strong> The stress of H⁺ accumulation drives upregulation of buffering enzymes, MCTs, and intracellular buffering proteins. Blunting this signal may reduce the training stimulus even as it increases volume.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Siegler's 10-week study found no additional training adaptation</strong> from bicarbonate-assisted resistance training. One study, one modality — but the only direct evidence on the question, and it doesn't support chronic training use.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Long-term data is essentially absent.</strong> Programs are adopting chronic training use before anyone has established whether it helps or harms development across a competitive season.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="d4" class="tab-content">
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">Stack has additive value</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Complementary mechanisms.</strong> Beta-alanine buffers intracellularly (carnosine in muscle), bicarbonate buffers extracellularly (blood). These are non-overlapping mechanisms that should theoretically add.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Some studies show increased probability of benefit</strong> from the combination (65% → 71% in one analysis). For events like the 100m where bicarbonate alone is borderline, the stack may tip the balance.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">Stack evidence is weak</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Statistical significance is rarely achieved</strong> in combination studies. Moving from "65% probability of benefit" to "71%" is not a compelling finding to justify two supplements with two side-effect profiles.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Beta-alanine causes paresthesia; bicarbonate causes GI distress.</strong> The combined side-effect burden on an athlete preparing for an important race is non-trivial. The bar for recommending the combination should be higher than "trends toward improvement."</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="d5" class="tab-content">
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">Appropriate for youth</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Same physiology, same mechanism.</strong> Studies on competitive youth swimmers (~15 years) show the buffering mechanism operates identically, with measurable blood pH responses and performance improvements comparable to adults.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Competitive parity.</strong> If senior youth athletes are competing at near-elite level and peers at other programs may be using bicarbonate, withholding it may be a competitive disadvantage.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">Premature for youth</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Zero long-term adolescent data.</strong> Chronic use during development is completely unstudied. Adolescent physiology is still developing, and the effects of repeated acute alkalosis on natural buffering development are unknown.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Supplement culture risk.</strong> Normalizing supplementation early — even with a legal substance — shapes athletes' relationship with performance enhancement in ways that may carry over to riskier choices later. Most sports medicine practitioners recommend postponing until training-based adaptation is exhausted.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Youth athletes haven't reached their natural ceiling.</strong> The rationale for supplementation is weakest precisely where natural adaptation potential is greatest.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="d6" class="tab-content">
+        <div class="insight-block" style="margin-bottom: 28px">
+          <div class="insight-text">"The research says it works and it does. But you know how it works? It works with a specific dose for a specific physiology at an incredibly specific time before a specific event. So if you want to stand back here and take a dart and throw it at a bullseye that's two rooms over there and hope you hit it, take your sodium bicarb."</div>
+          <div class="insight-source">// Bob Bowman — Coach of Michael Phelps, Léon Marchand, Summer McIntosh</div>
+        </div>
+        <div class="debate-container">
+          <div class="debate-side pro">
+            <div class="debate-label">Where Bowman is right</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>The precision requirement is real.</strong> Individual time-to-peak blood bicarbonate varies 60–180 minutes. That's not a minor footnote — it's the entire practical problem. Without individualized timing trials, dart-throw is an accurate metaphor.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>First-time race-day use is indefensible.</strong> The US Open story — athlete runs to the bathroom before the 200 free final after first-ever use — is not anecdote, it's the documented ~30% GI distress phenomenon. Bowman's position here is exactly correct.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Priority ordering matters.</strong> Hydration, carbohydrate fueling, and training consistency have far larger effect sizes across a far wider population. Optimizing the edges before the center is a coaching error Bowman has been diagnosing across all of his session advice — not just with supplements.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Practitioner experience from the 1990s.</strong> Bowman and Bergen were using it with elite swimmers decades ago. His skepticism is hard-won applied experience, not scientific naivety.</div></div>
+          </div>
+          <div class="debate-side con">
+            <div class="debate-label">Where Bowman oversimplifies</div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>He conflates naive use with all use.</strong> The dart-throw version he describes is not what sophisticated application looks like. Three to five individualized timing trials in training is feasible. His critique applies to unvalidated deployment; it does not apply to properly individualized protocols.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>"Waste of time" is rhetoric, not his actual position.</strong> His own words immediately undercut the dismissal: "it does work if you had a doctor test your blood, test your body weight, know exactly when you're going to swim..." That is a description of the conditions for effective use — not a claim it doesn't work.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>Elite programs have the infrastructure he describes.</strong> Blood testing, body composition, sports science staff, controlled pre-race timelines — these are standard at D1 university and national programs. His argument is most valid for club swimmers; it weakens considerably for the highest-resourced environments.</div></div>
+            <div class="debate-item"><div class="debate-dot"></div><div class="debate-text"><strong>"13 minutes and 30 seconds" is hyperbole.</strong> Peak alkalosis windows are roughly 20–40 minutes wide. The precision required is meaningful but not absurdly narrow. Athletes are threading a window, not a needle.</div></div>
+          </div>
+        </div>
+        <div class="insight-block" style="margin-top: 20px">
+          <div class="insight-text">Bowman's real argument is about coaching epistemology — what deserves attention. His bicarbonate comments fit the same pattern as everything else he coaches: don't do power training with age groupers, don't vary strokes before repetition builds stability, don't reach for the hack before the fundamentals are solid. Sodium bicarbonate is one more case of "optimizing around the edges before the center is solid." This is a practitioner insight, not a scientific refutation.</div>
+          <div class="insight-source">// Synthesis — Practitioner vs. Research Framing</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ RESEARCHERS ══════════════════════════════════════ -->
+  <section id="researchers" class="section">
+    <div class="evidence-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// Key Figures</div>
+        <h2 class="section-title">Who shapes<br>this field</h2>
+        <p class="section-desc">The researchers and organizations whose work you'll encounter most in this literature — and what each actually argues.</p>
+      </div>
+
+      <div class="researcher-grid" id="researcherGrid">
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ GAPS ══════════════════════════════════════ -->
+  <section id="gaps" class="section">
+    <div class="evidence-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// Open Questions</div>
+        <h2 class="section-title">What we don't<br>actually know</h2>
+        <p class="section-desc">The underexplored angles, systematic blind spots, and genuinely unresolved questions that sophisticated practitioners should hold.</p>
+      </div>
+
+      <div class="gaps-grid" id="gapsGrid"></div>
+
+      <div class="divider"></div>
+
+      <div class="section-header">
+        <div class="section-eyebrow">// The Meta-Question</div>
+        <h3 style="font-family: 'DM Serif Display', serif; font-size: 32px; margin-bottom: 16px">The competition validity problem</h3>
+      </div>
+      <div class="insight-block">
+        <div class="insight-text">"The entire evidence base comes from laboratory time trials and training simulations. The number of studies conducted in actual competition — with real race-day stress, competitive opponents, audience effects, and the full psychological weight of meaningful performance — is essentially zero."</div>
+        <div class="insight-source">// Identified gap from evidence synthesis</div>
+      </div>
+      <p style="font-size: 14px; color: var(--text-mid); line-height: 1.8; max-width: 700px; margin-top: 20px">Stress hormones differ in competition versus training. Motivational state affects pacing. The presence of competitors changes effort selection. Cortisol and adrenaline alter GI motility — precisely the mechanism by which bicarbonate causes problems. None of this is captured in existing research. The translation from laboratory to competition is an assumption, not a demonstrated fact. This is the deepest unresolved issue in the entire literature.</p>
+    </div>
+  </section>
+
+  <!-- ══════════════════════════════════════ FRAMEWORK ══════════════════════════════════════ -->
+  <section id="framework" class="section">
+    <div class="framework-wrap">
+      <div class="section-header">
+        <div class="section-eyebrow">// Coaching Framework</div>
+        <h2 class="section-title">The 20% that<br>explains everything</h2>
+        <p class="section-desc">What a sophisticated coaching program actually does — distilled from the full evidence base into actionable principles.</p>
+      </div>
+
+      <!-- DECISION TOOL -->
+      <div class="decision-tree">
+        <div class="mech-title">// Should This Athlete Use Bicarbonate? Decision Tool</div>
+        <div id="treeQ1">
+          <div class="tree-question">What event is the athlete preparing for?</div>
+          <div class="tree-options">
+            <div class="tree-option" onclick="treeSelect(this, 'event', '50-100')">50m or 100m</div>
+            <div class="tree-option" onclick="treeSelect(this, 'event', '200-400')">200m or 400m</div>
+            <div class="tree-option" onclick="treeSelect(this, 'event', '800+')">800m or above</div>
+            <div class="tree-option" onclick="treeSelect(this, 'event', 'training')">Training session only</div>
+          </div>
+        </div>
+        <div id="treeQ2" style="display:none; margin-top: 20px">
+          <div class="tree-question">Has this athlete completed individualized timing trials in training?</div>
+          <div class="tree-options">
+            <div class="tree-option" onclick="treeSelect(this, 'trials', 'yes')">Yes — 3+ sessions, timing established</div>
+            <div class="tree-option" onclick="treeSelect(this, 'trials', 'no')">No — not yet tested</div>
+          </div>
+        </div>
+        <div id="treeQ3" style="display:none; margin-top: 20px">
+          <div class="tree-question">What was the athlete's GI response during training trials?</div>
+          <div class="tree-options">
+            <div class="tree-option" onclick="showFinalResult('proceed', 'Clear to proceed. Evidence supports use for this event. Implement individualized timing from training trials. Monitor GI status on race day and have a contingency plan. Expected benefit: ~1–1.3% in 200m, ~0.6% in 400m.')">Minimal to none</div>
+            <div class="tree-option" onclick="showFinalResult('caution', 'Proceed with caution. Mild GI symptoms suggest modified delivery (capsules or split dose with food). Retest at competition intensity before using at a major event. Do not use for the first time at a high-stakes competition.')">Mild (manageable)</div>
+            <div class="tree-option" onclick="showFinalResult('stop', 'Do not use in competition. Significant GI distress eliminates any performance benefit and creates catastrophic risk in a race setting. This athlete is a non-responder for standard protocols. Consider protocol modifications (capsules, food) in future training cycles.')">Significant (nausea/cramping)</div>
+          </div>
+        </div>
+        <div id="treeResult" style="display:none"></div>
+      </div>
+
+      <!-- PRINCIPLES -->
+      <div class="section-header" style="margin-top: 56px">
+        <div class="section-eyebrow">// Core Principles</div>
+        <h3 style="font-family: 'DM Serif Display', serif; font-size: 32px">What sophisticated use looks like</h3>
+      </div>
+      <div class="principles-list">
+        <div class="principle-item">
+          <div class="principle-num">01</div>
+          <div class="principle-content">
+            <div class="principle-title">Treat it as a candidate, not a standard</div>
+            <div class="principle-text">Bicarbonate is not a default supplement for all middle-distance swimmers. It's a candidate intervention that must be validated for each individual. The average population effect does not predict individual response. Your job as coach is to generate athlete-specific evidence, not apply group averages.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">02</div>
+          <div class="principle-content">
+            <div class="principle-title">Never first-time in competition</div>
+            <div class="principle-text">This is the one absolute rule. No matter how compelling the evidence looks at the category level, the variability of individual response — particularly GI response — makes it irresponsible to introduce bicarbonate loading for the first time in a meaningful competition. There is no recovery from GI failure mid-race.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">03</div>
+          <div class="principle-content">
+            <div class="principle-title">Individualize timing rigorously</div>
+            <div class="principle-text">The 60–180 minute range of individual time-to-peak is not a minor footnote. An athlete who peaks at 150 minutes taking the supplement 60 minutes before a race is competing in a declining alkalotic state. Run 3–5 training sessions at competition intensity with varied ingestion windows to establish each athlete's personal peak. This is the most important practical variable in the entire protocol.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">04</div>
+          <div class="principle-content">
+            <div class="principle-title">Hold the magnitude of benefit loosely</div>
+            <div class="principle-text">The 1.3% average improvement is real but comes from a literature with significant methodological limitations — small samples, blinding failures, non-elite populations. The true effect for your athlete in real competition conditions is unknown and unknowable from the existing research. Plan for benefit, but don't build performance targets around it.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">05</div>
+          <div class="principle-content">
+            <div class="principle-title">Be skeptical of training use</div>
+            <div class="principle-text">The trend toward using bicarbonate as a chronic training tool is ahead of the evidence. The only study directly examining whether bicarbonate-assisted training produces greater adaptation (Siegler, resistance training, 10 weeks) found no additional benefit. The theoretical concern — that blunting metabolic acidosis reduces the adaptive signal — is unresolved. Use bicarbonate for competition; treat its training use as genuinely experimental.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">06</div>
+          <div class="principle-content">
+            <div class="principle-title">The right question to always ask</div>
+            <div class="principle-text">For this specific athlete, in this specific context, is the average effect large enough and reliable enough to justify the probability and consequence of the downside? The evidence gives you the population average. The training trials give you individual response data. Your judgment integrates both with the competitive stakes. That's the complete framework.</div>
+          </div>
+        </div>
+        <div class="principle-item">
+          <div class="principle-num">07</div>
+          <div class="principle-content">
+            <div class="principle-title">Basics before optimization — the Bowman priority order</div>
+            <div class="principle-text">The most decorated coach in Olympic swimming history frames it this way: before worrying about sodium bicarbonate, make sure the athlete is properly hydrated, fueled with carbohydrates, and showing up to every practice. The same epistemological error — reaching for edge optimization before the center is solid — explains why clubs do power training with age groupers, why coaches rotate stroke focus before repetition builds stability, and why athletes take supplements before establishing baseline training consistency. Bicarbonate is not a shortcut. It is a precision tool that amplifies the performance of athletes who have already built the foundation it's supposed to augment.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUMMARY BOX -->
+      <div style="background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: 12px; padding: 40px; margin-top: 48px">
+        <div class="mech-title">// The 20% that explains everything</div>
+        <p style="font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1.5; margin-bottom: 20px; color: var(--text)">High-intensity swimming creates H⁺ faster than the body clears it. Bicarbonate buys clearance capacity. The evidence for 200–400m events is real but built on imperfect data. GI risk is the central practical problem, not a footnote. Individual response varies enormously and predicting who benefits remains unsolved. Competition-condition validity is assumed, not demonstrated. Sophisticated programs individualize timing, validate GI tolerance in training, and hold the expected benefit loosely — treating it as a tool that may help specific athletes in specific contexts, not a standard protocol for all middle-distance swimmers.</p>
+        <div style="background: rgba(255,107,53,0.07); border-left: 3px solid var(--accent2); border-radius: 8px; padding: 20px 24px; margin-bottom: 24px">
+          <p style="font-style: italic; color: var(--text-mid); font-size: 14px; line-height: 1.7; margin-bottom: 8px">"The research says it works and it does. But it works with a specific dose for a specific physiology at an incredibly specific time before a specific event. Before we worry about sodium bicarb, how about make the intervals on your main set — or just show up to every practice."</p>
+          <p style="font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); letter-spacing: 1px">// Bob Bowman — 38 Olympic medals, coach of Phelps · Marchand · McIntosh</p>
+        </div>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap">
+          <span class="tag tag-blue">Mechanism: Real</span>
+          <span class="tag tag-green">200–400m: Supported</span>
+          <span class="tag tag-orange">Elite Evidence: Weak</span>
+          <span class="tag tag-red">GI Risk: Non-trivial</span>
+          <span class="tag tag-blue">Individualization: Essential</span>
+          <span class="tag tag-orange">Training Use: Unresolved</span>
+          <span class="tag tag-red">Without Trials: Dart-Throw</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+// ── SPLASH ──
+function enterApp() {
+  document.getElementById('splash').classList.add('out');
+  setTimeout(() => {
+    document.getElementById('splash').style.display = 'none';
+    const app = document.getElementById('app');
+    app.classList.add('visible');
+    animateBars();
+  }, 800);
+}
+
+// ── NAVIGATION ──
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'evidence') setTimeout(animateBars, 100);
+}
+
+// ── TABS ──
+function showTab(id, btn) {
+  const parent = btn.closest('.section') || document.body;
+  const tabBtns = btn.closest('.tab-bar').querySelectorAll('.tab-btn');
+  tabBtns.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  // find sibling tab-contents
+  const container = btn.closest('.tab-bar').parentElement;
+  container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (id === 'ev-strength') animateBars();
+}
+
+// ── EVIDENCE BARS ──
+function animateBars() {
+  setTimeout(() => {
+    document.querySelectorAll('.evidence-bar-fill').forEach(bar => {
+      bar.classList.add('animate');
+    });
+  }, 100);
+}
+
+// ── DISTANCE MATRIX ──
+const distInfo = {
+  '50m': { level: 'none', text: '<strong style="color:var(--danger)">No reliable evidence of benefit.</strong> The 50m event lasts 22–28 seconds at elite level. Meaningful anaerobic glycolytic contribution and significant H⁺ accumulation simply don\'t develop within that window. The event is over before bicarbonate\'s mechanism has any meaningful time to operate. <em>Recommendation: Do not use.</em>' },
+  '100m': { level: 'low', text: '<strong style="color:var(--warning)">Borderline / inconsistent evidence.</strong> The 100m (46–58s) sits in the transition zone. Meta-analysis shows no significant effect for 100m/100-yard events. Some individual studies show marginal benefits, particularly in the final section of the race. The beta-alanine + bicarbonate stack may improve the probability of benefit here. <em>Recommendation: Only with established individual response and validated protocol. High uncertainty.</em>' },
+  '200m': { level: 'high', text: '<strong style="color:var(--accent3)">Strongest evidence of benefit.</strong> The 200m (approximately 1:45–2:10 at elite level) is squarely within the optimal window for bicarbonate. Meta-analysis shows significant effect (SMD: -0.22, p<0.001). One controlled study found ~1.8s improvement on average. This is the primary target event. <em>Recommendation: Appropriate for use if individual response validated and GI tolerance confirmed.</em>' },
+  '400m': { level: 'high', text: '<strong style="color:var(--accent3)">Strong evidence of benefit.</strong> The 400m (3:40–4:30) is also within the effective window. Meta-analysis confirms significant benefit. The event duration means acidosis accumulation is substantial and the buffering advantage has more time to manifest. One study showed ~0.6% improvement. <em>Recommendation: Appropriate for use with same caveats as 200m. Strong candidate event.</em>' },
+  '800m+': { level: 'low', text: '<strong style="color:var(--warning)">Diminishing returns / mixed evidence.</strong> Events beyond 800m shift increasingly toward aerobic metabolism. H⁺ accumulation is less acute, and the bicarbonate buffer is largely exhausted before the race ends. Some evidence of benefit in the middle phases of longer events, but not consistently enough to recommend standard use. <em>Recommendation: Not a priority. Individual response testing warranted before consideration.</em>' }
+};
+
+function showDistDetail(el, event, level) {
+  document.querySelectorAll('.matrix-cell').forEach(c => c.style.opacity = '0.5');
+  el.style.opacity = '1';
+  const detail = document.getElementById('distDetail');
+  const info = distInfo[event];
+  detail.innerHTML = info.text;
+  detail.style.borderColor = level === 'high' ? 'rgba(168,255,120,0.3)' : level === 'low' ? 'rgba(255,211,42,0.3)' : 'rgba(255,71,87,0.3)';
+}
+
+// ── DOSE CALCULATOR ──
+function calcDose() {
+  const bw = parseFloat(document.getElementById('bodyWeight').value);
+  const gi = document.getElementById('giTolerance').value;
+  const dist = document.getElementById('eventDist').value;
+  const peak = document.getElementById('peakTime').value;
+  if (!bw || !gi || !dist) { document.getElementById('calcOutput').style.display = 'none'; return; }
+
+  const dose = (bw * 0.3).toFixed(1);
+  const ingestTime = peak || '90';
+  let gain, riskClass, riskText;
+
+  if (dist === '50') { gain = '0%'; riskClass = 'risk-high'; riskText = '⚠️ This event is outside the effective window for bicarbonate. The 50m is too short for meaningful H⁺ accumulation. Use is not recommended regardless of GI tolerance.' }
+  else if (dist === '100') { gain = '~0.3–0.8%'; riskClass = 'risk-med'; riskText = '⚡ The 100m is borderline. Evidence is inconsistent. Only use if individual training trials have shown clear, reproducible benefit with this athlete. High uncertainty in expected gain.' }
+  else if (dist === '200') { gain = '~1.0–1.5%'; riskClass = gi === 'good' ? 'risk-low' : gi === 'moderate' ? 'risk-med' : 'risk-high'; riskText = gi === 'good' ? '✓ Optimal event for bicarbonate use. Good GI tolerance noted. Proceed with standard protocol. Validate timing in training before competition deployment.' : gi === 'moderate' ? '⚡ Moderate GI symptoms warrant delivery format adjustment (capsules or split dose with food). Retest before major competition.' : '⚠️ Significant GI tolerance issues make competition use high-risk. The probability of GI distress eliminating any performance gain — or worse — is non-trivial.' }
+  else if (dist === '400') { gain = '~0.5–0.8%'; riskClass = gi === 'good' ? 'risk-low' : gi === 'moderate' ? 'risk-med' : 'risk-high'; riskText = gi === 'good' ? '✓ Strong candidate event for bicarbonate use. Good GI tolerance confirmed. Standard protocol appropriate.' : gi === 'moderate' ? '⚡ Consider modified delivery. Monitor closely during race-simulation training sessions.' : '⚠️ High GI risk. Not recommended without protocol modification and retesting.' }
+  else { gain = '<0.5%'; riskClass = 'risk-high'; riskText = '⚠️ Evidence is weak and inconsistent for events of this duration. Aerobic metabolism dominates; bicarbonate\'s buffering advantage is largely irrelevant. Use is not recommended.' }
+
+  document.getElementById('doseGrams').textContent = dose + 'g';
+  document.getElementById('ingestTime').textContent = ingestTime + ' min';
+  document.getElementById('expectedGain').textContent = gain;
+  const riskEl = document.getElementById('riskNote');
+  riskEl.className = 'risk-bar ' + riskClass;
+  riskEl.textContent = riskText;
+  document.getElementById('calcOutput').style.display = 'block';
+}
+
+// ── GI METER ──
+function setMeter(pct, note) {
+  document.getElementById('meterNeedle').style.left = pct + '%';
+  document.getElementById('meterNote').textContent = note;
+}
+
+// ── RESEARCHERS DATA ──
+const researchers = [
+  { name: 'Louise Burke', inst: 'Australian Catholic University', stance: 'pro', stanceLabel: 'Pro — Pragmatic', bio: 'The most globally cited voice in applied sports nutrition. Burke established bicarbonate as one of a small number of supplements with genuine evidence, and developed the practical framing around implementation considerations — dose, timing, and delivery format. Her approach is measured: she acknowledges individual variability while maintaining the supplement has a legitimate place in elite programs. Instrumental in getting bicarbonate included in IOC consensus recommendations.' },
+  { name: 'Bryan Saunders', inst: 'University of São Paulo', stance: 'nuanced', stanceLabel: 'Nuanced — Insider Critic', bio: 'One of the most prolific current researchers and co-lead on the 2021 ISSN position stand. What distinguishes Saunders is that he has also produced honest skeptical work — including studies demonstrating that bicarbonate does not consistently improve high-intensity exercise capacity and that within-individual variability is large enough to seriously complicate single-trial conclusions. Strongly pro-bicarbonate as a category, but rigorous about the ways the literature oversimplifies it. His work on individual timing variation has been highly influential.' },
+  { name: 'Guilherme Artioli', inst: 'Manchester Metropolitan University', stance: 'pro', stanceLabel: 'Pro — Mechanistic', bio: 'Closely linked with Saunders and the São Paulo research group. Has done significant work on both bicarbonate and beta-alanine, including the key studies examining whether combining the two produces additive effects for swimming performance. Mechanistically oriented — interested in understanding exactly how and when bicarbonate works rather than just whether it does. His work tends to support the consensus position while adding nuance around conditions under which it holds.' },
+  { name: 'Lars McNaughton', inst: 'Edge Hill University', stance: 'pro', stanceLabel: 'Pro — Foundational', bio: 'A foundational figure publishing on bicarbonate since the 1990s. His reviews are among the most-cited entry points into the literature. McNaughton occupies a firmly pro-bicarbonate position — his 2008 review "Ergogenic Effects of Sodium Bicarbonate" became a landmark reference. His work helped cement the 0.3 g/kg dosing standard the field now uses, and he has studied practical implementation including individualized timing protocols for swimmers specifically.' },
+  { name: 'Jason Siegler', inst: 'Arizona State University', stance: 'nuanced', stanceLabel: 'Nuanced — Applied', bio: 'A prolific collaborator whose work is most directly relevant to swimming coaches. Conducted key repeated-sprint swimming studies showing benefits emerging in later sprints of training sets. Importantly, his research also examined whether acute fatigue attenuation from bicarbonate translates into greater training adaptations over 10 weeks — and found it does not. This quietly undermines one of the key justifications for using it chronically in training, making Siegler an important moderating voice.' },
+  { name: 'Jozo Grgic', inst: 'Victoria University, Melbourne', stance: 'pro', stanceLabel: 'Pro — Consensus Author', bio: 'Lead author on the 2021 ISSN position stand, which is the current authoritative consensus document. Primarily a review and meta-analysis researcher. His umbrella review applied GRADE criteria to the evidence — an honest evidence-quality framework that rated some findings as only "moderate" certainty. This nuance tends to be lost when the consensus conclusions are cited downstream without attention to the confidence ratings attached to them.' },
+  { name: 'Hakan Westerblad', inst: 'Karolinska Institute', stance: 'skeptical', stanceLabel: 'Mechanism Skeptic', bio: 'Not primarily a bicarbonate researcher, but his muscle physiology work is the most important scientific challenge to the consensus narrative. Westerblad has demonstrated that H⁺ accumulation may not be the dominant driver of contractile failure during high-intensity exercise — pointing instead to inorganic phosphate and calcium handling disruption. If H⁺ is not the primary fatigue mechanism, bicarbonate\'s theoretical rationale becomes less clean. His work is acknowledged in the mainstream literature and then largely set aside.' },
+  { name: 'ISSN', inst: 'International Society of Sports Nutrition', stance: 'pro', stanceLabel: 'Institutional — Endorsing', bio: 'The most authoritative body producing consensus statements on this topic. The 2021 position stand is the document practitioners cite most often. The ISSN takes an evidence-based but relatively permissive stance on legal ergogenic aids. Worth noting: several position stand authors disclosed consulting relationships with the supplement industry (declared in the paper, not for bicarbonate specifically). This doesn\'t invalidate the science but is part of the context for how consensus gets framed and communicated.' },
+  { name: 'IOC Medical Commission', inst: 'International Olympic Committee', stance: 'pro', stanceLabel: 'Institutional — Endorsing', bio: 'The IOC\'s 2018 consensus statement on dietary supplements explicitly endorsed sodium bicarbonate as evidence-based for high-performance athletes. This formal institutional stamp is what most national federations and elite programs treat as authoritative. The IOC\'s position aligns with the ISSN — cautiously supportive, acknowledging side effects, recommending individualization. Its endorsement has significantly increased adoption in elite swimming programs globally.' },
+  { name: 'Bob Bowman', inst: 'University of Texas / Former ASU / Michael Phelps Coach', stance: 'nuanced', stanceLabel: 'Practitioner — Precision Skeptic', bio: 'The most decorated swimming coach in Olympic history (38 Olympic medals, coach of Michael Phelps, Léon Marchand, Summer McIntosh). Bowman has been explicit on the record that the science is real — "The research says it works and it does" — but frames practical use as requiring precision that most programs cannot deliver: a specific dose for a specific physiology at a specific time before a specific event. His dart-throw metaphor is exact: using bicarbonate without individualized timing trials is "standing back here and throwing a dart at a bullseye two rooms away." Critically, he and Paul Bergen were using it in elite programs in the 1990s — his skepticism is practitioner-experience skepticism, not scientific denial. His coaching-priorities argument is equally important: before worrying about sodium bicarbonate, make sure your athlete is hydrated, fueled with carbohydrates, and showing up to every practice. Optimization around the edges before the center is solid is the error he is diagnosing.' }
+];
+
+function renderResearchers() {
+  const grid = document.getElementById('researcherGrid');
+  grid.innerHTML = researchers.map((r, i) => `
+    <div class="researcher-card" id="rc${i}">
+      <div class="researcher-name">${r.name}</div>
+      <div class="researcher-inst">${r.inst}</div>
+      <span class="researcher-stance stance-${r.stance}">${r.stanceLabel}</span>
+      <div class="researcher-bio" id="rbio${i}">${r.bio}</div>
+      <button class="expand-btn" onclick="toggleResearcher(${i})">Read more →</button>
+    </div>
+  `).join('');
+}
+
+function toggleResearcher(i) {
+  const card = document.getElementById(`rc${i}`);
+  const bio = document.getElementById(`rbio${i}`);
+  const btn = card.querySelector('.expand-btn');
+  card.classList.toggle('expanded');
+  btn.textContent = card.classList.contains('expanded') ? 'Read less ↑' : 'Read more →';
+}
+
+// ── GAPS DATA ──
+const gaps = [
+  { icon: '🎭', title: 'The Blinding / Expectancy Problem', text: 'Studies are nominally double-blind but functionally single-blind. Athletes detect the active treatment through GI symptoms and physiological sensation. Expectancy alone can produce 1–2% performance improvements — precisely the magnitude bicarbonate produces. The true pharmacological contribution is likely smaller than the literature reports.' },
+  { icon: '♀️', title: 'The Female Athlete Gap', text: 'Only ~20% of studies include women. Female-specific analyses show inconsistent results — some studies find no benefit at all. Hormonal fluctuations across the menstrual cycle affect acid-base homeostasis. The entire dosing and timing framework may need revision for female athletes. The advice coaches give to female swimmers is extrapolated from male data.' },
+  { icon: '🧬', title: 'Individual Response Prediction', text: 'Variability in response is treated as noise rather than the central phenomenon. What predicts whether an athlete is a high-responder? Baseline blood bicarbonate? Muscle fiber type composition? Gut microbiome? Training age? These are scientifically tractable questions that remain completely unanswered.' },
+  { icon: '📅', title: 'Chronic Use & Long-Term Adaptation', text: 'Almost every study is acute. What happens to natural buffering capacity if bicarbonate is used heavily across a competitive season? Does chronic use change the dose-response relationship? Does the gut adapt? The only relevant study (Siegler, 10 weeks) found no additional training adaptation. Everything else is assumption.' },
+  { icon: '🧠', title: 'Central / Perceptual Mechanisms', text: 'Several studies show bicarbonate reduces RPE beyond what peripheral acid-base changes predict. The artistic swimming study found significantly lower perceived exertion independent of lactate differences. If bicarbonate is partly working through central nervous system or perceptual mechanisms, optimal use timing and protocol may differ from the peripheral buffering model.' },
+  { icon: '⛰️', title: 'Altitude & Hypoxic Training Interaction', text: 'High-altitude training creates its own acid-base disruption — respiratory alkalosis followed by complex metabolic changes. Whether bicarbonate interacts with, complements, or undermines these effects is completely unstudied. Given that elite programs routinely combine altitude camps with peak preparation, this is a gap with real practical stakes.' },
+  { icon: '🏟️', title: 'Competition-Condition Validity', text: 'Zero studies conducted in actual competition. Stress hormones differ. Pacing changes. GI motility is altered by cortisol and adrenaline — exactly the mechanism by which bicarbonate causes problems. The translation from Tuesday-morning lab time trial to Olympic final is an assumption the field has never tested.' },
+  { icon: '👶', title: 'Youth Developmental Effects', text: 'Youth physiology studies show the same acute mechanism operates. But chronic use during development is completely unstudied. Does repeated acute alkalosis during adolescence affect natural buffering development? Does introducing supplement culture early shape risk behavior later? These questions have no evidence base.' }
+];
+
+function renderGaps() {
+  const grid = document.getElementById('gapsGrid');
+  grid.innerHTML = gaps.map(g => `
+    <div class="gap-card">
+      <div class="gap-icon">${g.icon}</div>
+      <div class="gap-title">${g.title}</div>
+      <div class="gap-text">${g.text}</div>
+    </div>
+  `).join('');
+}
+
+// ── DECISION TREE ──
+let treeState = {};
+function treeSelect(el, key, val) {
+  const parent = el.closest('[id^="treeQ"]');
+  parent.querySelectorAll('.tree-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  treeState[key] = val;
+
+  if (key === 'event') {
+    document.getElementById('treeQ2').style.display = 'none';
+    document.getElementById('treeQ3').style.display = 'none';
+    document.getElementById('treeResult').style.display = 'none';
+
+    if (val === '200-400') {
+      setTimeout(() => { document.getElementById('treeQ2').style.display = 'block'; }, 200);
+    } else if (val === '50-100') {
+      showFinalResult('caution', 'Borderline event. Evidence is inconsistent for 100m and absent for 50m. Only consider for 100m if the athlete has shown clear individual response in training trials and GI tolerance is excellent. The risk-benefit calculation is much less favorable than for 200–400m events.');
+    } else if (val === '800+') {
+      showFinalResult('stop', 'Not recommended. Evidence for 800m+ events is weak and inconsistent. The aerobic energy system dominates at this duration; bicarbonate\'s buffering advantage has limited scope. Training time is better spent on other performance interventions.');
+    } else if (val === 'training') {
+      showFinalResult('caution', 'Proceed with significant caution. Chronic training use is ahead of the evidence. The only direct study (Siegler, 10 weeks) found no additional training adaptation. Theoretical concern: blunting metabolic acidosis may reduce the adaptive signal that drives buffering system development. Treat any training use as genuinely experimental and monitor adaptation markers.');
+    }
+  }
+
+  if (key === 'trials') {
+    document.getElementById('treeQ3').style.display = 'none';
+    document.getElementById('treeResult').style.display = 'none';
+
+    if (val === 'yes') {
+      setTimeout(() => { document.getElementById('treeQ3').style.display = 'block'; }, 200);
+    } else {
+      showFinalResult('caution', 'Do not use in competition yet. Complete individualized timing trials first: 3–5 training sessions at competition intensity with varied ingestion windows (60, 90, 120+ minutes). Establish personal time-to-peak and GI tolerance profile. Return to this decision tool when trials are complete. Skipping this step means deploying an unvalidated protocol in a high-stakes context.');
+    }
+  }
+}
+
+function showFinalResult(type, text) {
+  const result = document.getElementById('treeResult');
+  result.style.display = 'block';
+  result.className = 'tree-result result-' + (type === 'proceed' ? 'proceed' : type === 'caution' ? 'caution' : 'stop');
+  const icon = type === 'proceed' ? '✓' : type === 'caution' ? '⚡' : '✗';
+  result.innerHTML = `<strong>${icon} ${type.charAt(0).toUpperCase() + type.slice(1)}:</strong> ${text}`;
+  result.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+// ── INIT ──
+renderResearchers();
+renderGaps();
+</script>
+</body>
+</html>
