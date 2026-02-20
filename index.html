@@ -117,40 +117,63 @@ header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(8,12,16,0.85);
+  background: rgba(8,12,16,0.92);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
   padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 60px;
+  height: 72px;
+  gap: 16px;
 }
 .logo {
   font-family: 'DM Mono', monospace;
   font-size: 14px;
   color: var(--accent);
   letter-spacing: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 nav {
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 .nav-btn {
-  padding: 8px 16px;
+  padding: 9px 15px;
   background: none;
   border: none;
-  color: var(--text-dim);
-  font-family: 'DM Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 1px;
+  color: var(--text-mid);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
   cursor: pointer;
   transition: all 0.2s;
-  border-radius: 4px;
-  text-transform: uppercase;
+  border-radius: 6px;
+  white-space: nowrap;
 }
 .nav-btn:hover { color: var(--text); background: var(--surface); }
-.nav-btn.active { color: var(--accent); background: rgba(0,212,255,0.08); }
+.nav-btn.active {
+  color: var(--accent);
+  background: rgba(0,212,255,0.1);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+.nav-btn.substack-btn {
+  color: #ff6314;
+  border: 1px solid rgba(255,99,20,0.3);
+  background: rgba(255,99,20,0.06);
+  font-weight: 600;
+  margin-left: 8px;
+}
+.nav-btn.substack-btn:hover {
+  background: rgba(255,99,20,0.14);
+  border-color: rgba(255,99,20,0.6);
+  color: #ff7a35;
+}
+a.nav-btn { text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
 
 /* ── SECTIONS ── */
 .section {
@@ -962,6 +985,650 @@ nav {
   color: var(--text-dim);
   text-transform: uppercase;
 }
+
+/* ══════════════════════════════
+   INTERACTIVE MODELS — styles
+══════════════════════════════ */
+/* ── MODEL CONTAINER ── */
+.model-block {
+  margin-bottom: 80px;
+}
+.model-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 12px;
+}
+.model-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.15;
+  margin-bottom: 8px;
+}
+.model-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.7;
+  max-width: 700px;
+  margin-bottom: 32px;
+}
+
+/* ── PANELS ── */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.panel-dot { width: 8px; height: 8px; border-radius: 50%; }
+.panel-dot.cyan { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+.panel-dot.orange { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+.panel-dot.green { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
+.panel-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+  flex: 1;
+}
+.panel-body { padding: 28px; }
+
+/* ── LAYER TABS ── */
+.layer-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+.layer-tab {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  border-radius: 7px;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.layer-tab:hover { color: var(--text); background: var(--surface2); }
+.layer-tab.active { background: rgba(0,212,255,0.12); color: var(--accent); }
+.layer-tab.orange.active { background: rgba(255,107,53,0.12); color: var(--accent2); }
+.layer-tab.green.active { background: rgba(168,255,120,0.12); color: var(--accent3); }
+.layer-tab.purple.active { background: rgba(192,132,252,0.12); color: var(--purple); }
+
+.layer-content { display: none; }
+.layer-content.active { display: block; }
+
+/* ── CANVAS WRAPPER ── */
+.canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+canvas { display: block; }
+
+/* ── CONTROLS ── */
+.ctrl-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.ctrl-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 160px;
+}
+.ctrl-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+.ctrl-value {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+}
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  outline: none;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(0,212,255,0.5);
+}
+input[type=range].orange::-webkit-slider-thumb { background: var(--accent2); box-shadow: 0 0 8px rgba(255,107,53,0.5); }
+input[type=range].green::-webkit-slider-thumb { background: var(--accent3); box-shadow: 0 0 8px rgba(168,255,120,0.5); }
+
+select {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* ── INFO BOXES ── */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.info-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+}
+.info-card-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.info-card-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 22px;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+.info-card-value.orange { color: var(--accent2); }
+.info-card-value.green { color: var(--accent3); }
+.info-card-value.danger { color: var(--danger); }
+.info-card-sub { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
+/* ── MECHANISM DIAGRAM ── */
+.mech-diagram {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  height: 300px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.mech-zone {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 12px;
+  position: relative;
+  border-right: 1px solid var(--border);
+  transition: background 0.3s;
+}
+.mech-zone:last-child { border-right: none; }
+.mech-zone:hover { background: var(--surface2); }
+.mech-zone-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  text-align: center;
+}
+.mech-icon { font-size: 28px; margin-bottom: 12px; }
+.mech-text { font-size: 11px; color: var(--text-mid); text-align: center; line-height: 1.5; }
+.mech-arrow {
+  position: absolute;
+  right: -14px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  font-size: 20px;
+  color: var(--accent);
+}
+
+.particle-row {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin: 8px 0;
+  flex-wrap: wrap;
+}
+.particle {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 600;
+  font-family: 'DM Mono', monospace;
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.particle.bicarb { background: rgba(0,212,255,0.2); border: 1px solid var(--accent); color: var(--accent); animation-delay: 0s; }
+.particle.hplus { background: rgba(255,71,87,0.2); border: 1px solid var(--danger); color: var(--danger); animation-delay: 0.3s; }
+.particle.h2co3 { background: rgba(255,211,42,0.2); border: 1px solid var(--accent4); color: var(--accent4); animation-delay: 0.6s; }
+.particle.co2 { background: rgba(168,255,120,0.2); border: 1px solid var(--accent3); color: var(--accent3); animation-delay: 0.9s; }
+.particle.pi { background: rgba(192,132,252,0.2); border: 1px solid var(--purple); color: var(--purple); }
+.particle.ca { background: rgba(255,107,53,0.2); border: 1px solid var(--accent2); color: var(--accent2); }
+
+/* ── WESTERBLAD TOGGLE ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.toggle-btn {
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  color: var(--text-mid);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.toggle-btn.active-purple { background: rgba(192,132,252,0.15); border-color: var(--purple); color: var(--purple); }
+.toggle-btn:hover { background: var(--surface2); }
+.toggle-label { font-size: 13px; color: var(--text-dim); }
+
+.westerblad-panel {
+  display: none;
+  background: rgba(192,132,252,0.05);
+  border: 1px solid rgba(192,132,252,0.2);
+  border-radius: 10px;
+  padding: 20px;
+  margin-top: 16px;
+}
+.westerblad-panel.show { display: block; }
+.westerblad-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 12px;
+}
+.westerblad-text { font-size: 13px; color: var(--text-mid); line-height: 1.7; margin-bottom: 12px; }
+.westerblad-verdict {
+  font-size: 13px;
+  color: var(--text);
+  background: rgba(192,132,252,0.08);
+  border-left: 3px solid var(--purple);
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.6;
+}
+
+/* ── RACE MODEL ── */
+.athlete-config {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.race-panel {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.race-panel-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+}
+
+/* ── ACTIVATE BUTTON ── */
+.activate-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, rgba(0,212,255,0.15), rgba(0,212,255,0.05));
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-bottom: 24px;
+  width: 100%;
+  justify-content: center;
+}
+.activate-btn:hover { background: rgba(0,212,255,0.2); box-shadow: 0 0 24px rgba(0,212,255,0.2); }
+.activate-btn.running { border-color: var(--accent2); color: var(--accent2); background: rgba(255,107,53,0.1); }
+.activate-btn.done { border-color: var(--accent3); color: var(--accent3); background: rgba(168,255,120,0.08); }
+.btn-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+.activate-btn.running .btn-dot { background: var(--accent2); }
+.activate-btn.done .btn-dot { background: var(--accent3); animation: none; }
+
+/* ── RACE CANVAS ── */
+.race-canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+/* ── LAP TABLE ── */
+.lap-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+}
+.lap-table th {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+.lap-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: var(--text-mid);
+  transition: color 0.3s;
+}
+.lap-table tr.active td { background: rgba(0,212,255,0.04); }
+.lap-table .time-no { color: var(--text-mid); }
+.lap-table .time-yes { color: var(--accent3); font-weight: 500; }
+.lap-table .diff-pos { color: var(--accent3); }
+.lap-table .diff-neg { color: var(--danger); }
+.lap-table .diff-zero { color: var(--text-dim); }
+
+/* ── STAT STRIP ── */
+.stat-strip {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.stat-chip {
+  flex: 1;
+  min-width: 130px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.stat-chip-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.stat-chip-val {
+  font-family: 'DM Serif Display', serif;
+  font-size: 20px;
+  color: var(--accent);
+}
+.stat-chip-val.orange { color: var(--accent2); }
+.stat-chip-val.green { color: var(--accent3); }
+.stat-chip-val.danger { color: var(--danger); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 60px 0;
+}
+
+/* ── LEGEND ── */
+.legend {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-mid);
+}
+.legend-line {
+  width: 24px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* ── DEEP DIVE ── */
+.deep-dive {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-top: 12px;
+}
+.deep-dive-toggle {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.deep-dive-content {
+  display: none;
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--text-mid);
+  line-height: 1.75;
+}
+.deep-dive-content.show { display: block; }
+.deep-dive-content p { margin-bottom: 10px; }
+.deep-dive-content strong { color: var(--text); }
+.eqn {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 10px 0;
+  color: var(--accent4);
+}
+
+/* models deep-dive */
+.deep-dive {
+  background: rgba(0,212,255,0.04);
+  border: 1px solid rgba(0,212,255,0.1);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-top: 12px;
+}
+.deep-dive-toggle {
+  background: none; border: none;
+  color: var(--accent);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; letter-spacing: 2px;
+  cursor: pointer;
+}
+.deep-dive-content {
+  display: none;
+  margin-top: 12px;
+  font-size: 13px; color: var(--text-mid); line-height: 1.75;
+}
+.deep-dive-content.show { display: block; }
+.deep-dive-content p { margin-bottom: 10px; }
+.deep-dive-content strong { color: var(--text); }
+.eqn {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin: 10px 0;
+  color: var(--accent4);
+}
+
+/* ── SUBSTACK CTA ── */
+.substack-cta {
+  margin: 60px auto 24px;
+  max-width: 720px;
+  background: linear-gradient(135deg, rgba(255,99,20,0.08) 0%, rgba(255,99,20,0.03) 100%);
+  border: 1px solid rgba(255,99,20,0.25);
+  border-radius: 16px;
+  padding: 36px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.substack-cta::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,99,20,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.substack-cta-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #ff6314;
+  margin-bottom: 12px;
+  opacity: 0.8;
+}
+.substack-cta-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px;
+  line-height: 1.2;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+.substack-cta-title em {
+  color: #ff6314;
+  font-style: italic;
+}
+.substack-cta-desc {
+  font-size: 14px;
+  color: var(--text-mid);
+  line-height: 1.65;
+  max-width: 500px;
+  margin: 0 auto 24px;
+}
+.substack-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #ff6314, #ff4500);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.25s;
+  box-shadow: 0 4px 20px rgba(255,99,20,0.35);
+}
+.substack-cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255,99,20,0.5);
+  background: linear-gradient(135deg, #ff7a35, #ff5500);
+}
+.substack-cta-btn svg {
+  width: 18px; height: 18px; flex-shrink: 0;
+}
+.substack-cta-note {
+  margin-top: 14px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.substack-cta-note a {
+  color: #ff6314;
+  text-decoration: none;
+  opacity: 0.8;
+}
+.substack-cta-note a:hover { opacity: 1; text-decoration: underline; }
+
 </style>
 </head>
 <body>
@@ -981,15 +1648,12 @@ nav {
       <button class="nav-btn active" onclick="showSection('overview', this)">Overview</button>
       <button class="nav-btn" onclick="showSection('evidence', this)">Evidence</button>
       <button class="nav-btn" onclick="showSection('protocol', this)">Protocol</button>
+      <button class="nav-btn" onclick="showSection('models', this)">⚗ Models</button>
       <button class="nav-btn" onclick="showSection('debates', this)">Debates</button>
       <button class="nav-btn" onclick="showSection('researchers', this)">Researchers</button>
       <button class="nav-btn" onclick="showSection('gaps', this)">Open Questions</button>
       <button class="nav-btn" onclick="showSection('framework', this)">Coach Framework</button>
-
-        <!-- SwimEd Link -->
-    <a class="nav-btn" href="https://swimed.substack.com/" target="_blank" rel="noopener">
-      SwimEd →
-    </a>
+      <a href="https://swimed.substack.com/" target="_blank" class="nav-btn substack-btn">✦ SwimEd</a>
     </nav>
   </header>
 
@@ -1000,15 +1664,6 @@ nav {
       <h1 class="hero-title">The supplement the<br>evidence actually <em>supports</em></h1>
       <p class="hero-lead">A deep intelligence brief on NaHCO₃ — its mechanism, evidence base, key debates, unresolved questions, and what a sophisticated coaching program actually does with it. Includes analysis of Bob Bowman's practitioner critique.</p>
 
-      <div style="margin-bottom: 56px;">
-  <a href="https://swimed.substack.com/" target="_blank" rel="noopener" class="hero-cta">
-    SwimEd Research Briefs →
-  </a>
-  <div style="font-size:13px;color:var(--text-dim);margin-top:10px;">
-    Ongoing high-performance swim science, distilled for elite coaches.
-  </div>
-</div>
-      
       <div class="stat-grid">
         <div class="stat-card" style="--card-accent: var(--accent)">
           <div class="stat-num">1.3%</div>
@@ -1094,31 +1749,17 @@ nav {
         </div>
       </div>
     </div>
-    <div class="evidence-wrap" style="padding-top:0;">
-  <div class="content-card" style="border-radius:12px;">
-    <div class="section-eyebrow">// SwimEd</div>
-    <h3 style="font-family:'DM Serif Display', serif; font-size:26px; margin-bottom:10px;">
-      Get the next brief
-    </h3>
-    <p style="font-size:14px;color:var(--text-mid);line-height:1.8;margin-bottom:18px;max-width:760px;">
-      Subscribe to SwimEd for research synthesis and implementation frameworks
-      for high-performance swim programs.
-    </p>
 
-    <iframe src="https://swimed.substack.com/embed"
-            width="100%"
-            height="200"
-            style="border:1px solid var(--border); border-radius:10px; background:white;">
-    </iframe>
-
-    <div style="margin-top:14px;">
-      <a href="https://swimed.substack.com/" target="_blank" rel="noopener"
-         style="color:var(--accent); font-family:'DM Mono', monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; text-decoration:none;">
-        Visit SwimEd →
-      </a>
-    </div>
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
   </div>
-</div>
   </section>
 
   <!-- ══════════════════════════════════════ EVIDENCE ══════════════════════════════════════ -->
@@ -1247,6 +1888,17 @@ nav {
         </div>
       </div>
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 
   <!-- ══════════════════════════════════════ PROTOCOL ══════════════════════════════════════ -->
@@ -1400,6 +2052,17 @@ nav {
         <p>This isn't optional refinement. It's the difference between using bicarbonate intelligently and using it naively.</p>
       </div>
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 
   <!-- ══════════════════════════════════════ DEBATES ══════════════════════════════════════ -->
@@ -1533,6 +2196,17 @@ nav {
       </div>
 
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 
   <!-- ══════════════════════════════════════ RESEARCHERS ══════════════════════════════════════ -->
@@ -1547,6 +2221,17 @@ nav {
       <div class="researcher-grid" id="researcherGrid">
       </div>
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 
   <!-- ══════════════════════════════════════ GAPS ══════════════════════════════════════ -->
@@ -1572,6 +2257,17 @@ nav {
       </div>
       <p style="font-size: 14px; color: var(--text-mid); line-height: 1.8; max-width: 700px; margin-top: 20px">Stress hormones differ in competition versus training. Motivational state affects pacing. The presence of competitors changes effort selection. Cortisol and adrenaline alter GI motility — precisely the mechanism by which bicarbonate causes problems. None of this is captured in existing research. The translation from laboratory to competition is an assumption, not a demonstrated fact. This is the deepest unresolved issue in the entire literature.</p>
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 
   <!-- ══════════════════════════════════════ FRAMEWORK ══════════════════════════════════════ -->
@@ -1689,6 +2385,447 @@ nav {
         </div>
       </div>
     </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
+  </section>
+  <section id="models" class="section">
+    <div class="section-header">
+      <div class="section-eyebrow">// Interactive Models</div>
+      <h2 class="section-title">Biochemistry & Race<br>Simulation</h2>
+      <p class="section-subtitle">Two live models: the full physiological mechanism from ingestion to ion transport, and a lap-by-lap race simulator with configurable athlete parameters.</p>
+    </div>
+    <div class="model-block">
+    <div class="model-label">// Model 01</div>
+    <h2 class="model-title">Biochemistry, Pharmacology<br>& Physiology</h2>
+    <p class="model-desc">Four interactive layers — from ingestion to ion transport. Start at the top and go deeper, or jump to any layer. Each layer builds on the one above.</p>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-dot cyan"></div>
+        <div class="panel-title">NaHCO₃ — Mechanism Explorer</div>
+      </div>
+      <div class="panel-body">
+
+        <div class="layer-tabs">
+          <button class="layer-tab active" onclick="showLayer('l1',this)">① Absorption</button>
+          <button class="layer-tab orange" onclick="showLayer('l2',this)">② Blood pH</button>
+          <button class="layer-tab green" onclick="showLayer('l3',this)">③ Ion Transport</button>
+          <button class="layer-tab purple" onclick="showLayer('l4',this)">④ Westerblad</button>
+        </div>
+
+        <!-- LAYER 1 — ABSORPTION KINETICS -->
+        <div class="layer-content active" id="l1">
+          <div class="ctrl-row">
+            <div class="ctrl-group">
+              <div class="ctrl-label">Individual timing (min to peak HCO₃⁻)</div>
+              <input type="range" id="peakTime" min="60" max="180" value="90" oninput="updateAbsorption()">
+              <div class="ctrl-value" id="peakTimeVal">90 min</div>
+            </div>
+            <div class="ctrl-group">
+              <div class="ctrl-label">Dose (g/kg body mass)</div>
+              <input type="range" min="15" max="40" value="30" oninput="updateAbsorption()" id="doseRange">
+              <div class="ctrl-value" id="doseVal">0.30 g/kg</div>
+            </div>
+            <div class="ctrl-group">
+              <div class="ctrl-label">Delivery format</div>
+              <select onchange="updateAbsorption()" id="delivery">
+                <option value="solution">Solution in water</option>
+                <option value="capsule" selected>Capsules</option>
+                <option value="food">With CHO meal</option>
+                <option value="split">Split dose</option>
+              </select>
+            </div>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="absCanvas"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent)"></div>Blood [HCO₃⁻] mmol/L</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent2); border-top: 2px dashed var(--accent2); background: none; width:24px; height:2px; border-bottom: none; border-left:none; border-right:none;"></div>Race window</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent3)"></div>Baseline (no dose)</div>
+          </div>
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">Peak [HCO₃⁻]</div>
+              <div class="info-card-value" id="peakConc">29.4</div>
+              <div class="info-card-sub">mmol/L (baseline ~24 mmol/L)</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">Time to peak</div>
+              <div class="info-card-value" id="timeToPeak">90 min</div>
+              <div class="info-card-sub">Individual variation: 60–180 min</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">GI risk</div>
+              <div class="info-card-value danger" id="giRisk">Moderate</div>
+              <div class="info-card-sub" id="giRiskSub">Capsules reduce peak load</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">Buffer increase</div>
+              <div class="info-card-value green" id="bufferInc">+22%</div>
+              <div class="info-card-sub">Extracellular buffering capacity</div>
+            </div>
+          </div>
+          <div class="deep-dive">
+            <button class="deep-dive-toggle" onclick="toggleDeep('dd1')">// Deep dive: Absorption pharmacokinetics ▾</button>
+            <div class="deep-dive-content" id="dd1">
+              <p>Sodium bicarbonate dissociates immediately in gastric fluid: <strong>NaHCO₃ → Na⁺ + HCO₃⁻</strong>. In the highly acidic stomach (pH ~1.5–3.5), bicarbonate is rapidly converted:</p>
+              <div class="eqn">HCO₃⁻ + H⁺ → H₂CO₃ → H₂O + CO₂↑</div>
+              <p>The CO₂ produced drives the bloating and belching characteristic of bicarbonate ingestion. Absorption of the remaining bicarbonate and sodium ions occurs primarily in the <strong>small intestine</strong> via active transport and passive diffusion. Peak plasma [HCO₃⁻] typically occurs 60–90 min post-ingestion in most individuals — but the range is 60–180 min, driven by differences in gastric emptying rate, gut motility, and baseline acid-base status.</p>
+              <p><strong>Delivery format effects:</strong> Solution maximizes absorption rate but floods the GI tract with osmotic load. Capsules delay gastric emptying and distribute the bolus, reducing peak osmotic stress. Co-ingestion with a carbohydrate meal further slows absorption and reduces GI symptoms by diluting the bicarbonate bolus.</p>
+              <p>The clinically important implication: an athlete who takes bicarbonate 60 minutes before their event but peaks at 150 minutes is competing in a <em>declining</em> alkalotic state — potentially worse than no dose at all due to GI discomfort without physiological benefit.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 2 — BLOOD pH BUFFERING -->
+        <div class="layer-content" id="l2">
+          <div class="ctrl-row">
+            <div class="ctrl-group">
+              <div class="ctrl-label">Exercise intensity (% of max effort)</div>
+              <input type="range" class="orange" id="intensity" min="70" max="100" value="90" oninput="updatepH()">
+              <div class="ctrl-value orange" id="intensityVal">90%</div>
+            </div>
+            <div class="ctrl-group">
+              <div class="ctrl-label">Duration (minutes)</div>
+              <input type="range" class="orange" id="duration" min="1" max="8" value="2" oninput="updatepH()">
+              <div class="ctrl-value orange" id="durationVal">2 min (200m)</div>
+            </div>
+          </div>
+          <div class="canvas-wrap">
+            <canvas id="phCanvas"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--danger)"></div>Without NaHCO₃ — blood pH</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent)"></div>With NaHCO₃ — blood pH</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent4); height:1px; border-top: 1px dashed var(--accent4); background: none;"></div>Fatigue threshold (~7.10)</div>
+          </div>
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">pH at exhaustion (no bicarb)</div>
+              <div class="info-card-value danger" id="phNoB">7.08</div>
+              <div class="info-card-sub">Below 7.0 = severe acidosis</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">pH at exhaustion (with bicarb)</div>
+              <div class="info-card-value" id="phWithB">7.14</div>
+              <div class="info-card-sub">Maintained above threshold longer</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">Time above pH 7.10</div>
+              <div class="info-card-value green" id="timeAbove">+18 sec</div>
+              <div class="info-card-sub">Additional high-output capacity</div>
+            </div>
+          </div>
+          <div class="deep-dive">
+            <button class="deep-dive-toggle" onclick="toggleDeep('dd2')">// Deep dive: Henderson-Hasselbalch & buffering chemistry ▾</button>
+            <div class="deep-dive-content" id="dd2">
+              <p>Blood pH is governed by the Henderson-Hasselbalch equation:</p>
+              <div class="eqn">pH = pKₐ + log([HCO₃⁻] / [CO₂]) &nbsp;&nbsp; pKₐ = 6.1</div>
+              <p>During high-intensity exercise, glycolysis generates pyruvate faster than mitochondria can consume it. Pyruvate is converted to lactate, with co-release of H⁺. This H⁺ is initially buffered intracellularly (by phosphocreatine, inorganic phosphate, and proteins), then extracellularly by the bicarbonate system:</p>
+              <div class="eqn">H⁺ + HCO₃⁻ → H₂CO₃ → H₂O + CO₂ (exhaled)</div>
+              <p>By pre-loading extracellular [HCO₃⁻] from ~24 to ~29 mmol/L, bicarbonate loading <strong>steepens the H⁺ concentration gradient</strong> between intracellular and extracellular compartments. This accelerates the efflux of H⁺ from contracting muscle via MCT (monocarboxylate transporter) co-transport, delaying intracellular acidosis.</p>
+              <p>The physiological fatigue threshold (pH ~7.0–7.10 in muscle) is not crossed as quickly, extending the time the athlete can sustain high glycolytic flux. <strong>This is the mechanistic basis of the performance benefit.</strong></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 3 — ION TRANSPORT -->
+        <div class="layer-content" id="l3">
+          <p style="font-size:13px; color:var(--text-mid); line-height:1.7; margin-bottom:20px;">The muscle cell membrane is where the core mechanism operates. Hover each zone to explore the molecular events.</p>
+          <div class="mech-diagram">
+            <div class="mech-zone" style="background: rgba(255,71,87,0.04)">
+              <div class="mech-zone-label">Inside muscle cell</div>
+              <div class="mech-icon">💪</div>
+              <div class="particle-row">
+                <div class="particle hplus">H⁺</div>
+                <div class="particle hplus">H⁺</div>
+                <div class="particle hplus">H⁺</div>
+              </div>
+              <div class="mech-text">Glycolysis generates H⁺ rapidly. Intracellular pH falls. Enzyme activity impaired.</div>
+              <div class="mech-arrow">→</div>
+            </div>
+            <div class="mech-zone" style="background: rgba(0,212,255,0.04)">
+              <div class="mech-zone-label">MCT4 co-transporter</div>
+              <div class="mech-icon">🔄</div>
+              <div class="particle-row">
+                <div class="particle hplus">H⁺</div>
+                <div class="particle" style="background:rgba(255,255,255,0.1); border:1px solid #666; font-size:8px; color:#999; width:28px">lac⁻</div>
+              </div>
+              <div class="mech-text">MCT4 co-transports H⁺ + lactate out of cell. Rate limited by extracellular [HCO₃⁻] gradient.</div>
+              <div class="mech-arrow">→</div>
+            </div>
+            <div class="mech-zone" style="background: rgba(0,212,255,0.08)">
+              <div class="mech-zone-label">Extracellular / Blood</div>
+              <div class="mech-icon">🩸</div>
+              <div class="particle-row">
+                <div class="particle bicarb">HCO₃</div>
+                <div class="particle bicarb">HCO₃</div>
+                <div class="particle h2co3">H₂CO₃</div>
+              </div>
+              <div class="mech-text">Elevated [HCO₃⁻] captures H⁺ → H₂CO₃. Gradient maintained. More H⁺ can exit cell.</div>
+              <div class="mech-arrow">→</div>
+            </div>
+            <div class="mech-zone" style="background: rgba(168,255,120,0.04)">
+              <div class="mech-zone-label">Lung / Exhalation</div>
+              <div class="mech-icon">💨</div>
+              <div class="particle-row">
+                <div class="particle co2">CO₂</div>
+                <div class="particle co2">CO₂</div>
+              </div>
+              <div class="mech-text">H₂CO₃ → H₂O + CO₂. CO₂ exhaled via lungs. System is self-clearing.</div>
+            </div>
+          </div>
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="info-card-label">Key transporter</div>
+              <div class="info-card-value" style="font-size:16px">MCT1 / MCT4</div>
+              <div class="info-card-sub">Monocarboxylate transporters. Rate increases with steeper H⁺ gradient.</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">Net effect</div>
+              <div class="info-card-value green" style="font-size:16px">↑ H⁺ efflux</div>
+              <div class="info-card-sub">Intracellular pH stays higher for longer during glycolytic flux.</div>
+            </div>
+            <div class="info-card">
+              <div class="info-card-label">Self-limiting factor</div>
+              <div class="info-card-value orange" style="font-size:16px">↑ VCO₂</div>
+              <div class="info-card-sub">Increased CO₂ production drives hyperventilation. Limits at very high intensities.</div>
+            </div>
+          </div>
+          <div class="deep-dive">
+            <button class="deep-dive-toggle" onclick="toggleDeep('dd3')">// Deep dive: MCT kinetics & intracellular buffering ▾</button>
+            <div class="deep-dive-content" id="dd3">
+              <p>The key molecular actors are the <strong>MCT1 and MCT4 monocarboxylate transporters</strong>. MCT4 is the high-capacity efflux transporter in glycolytic (Type II) muscle fibers — the fibers that dominate energy production in 200–400m swimming. Its transport rate is directly proportional to the transmembrane H⁺ gradient.</p>
+              <p>Pre-exercise bicarbonate loading raises extracellular [HCO₃⁻] from ~24 to ~28–30 mmol/L. This alkalizes the extracellular space, increasing the chemical gradient that drives H⁺ efflux. The rate equation simplifies to:</p>
+              <div class="eqn">J(H⁺) ∝ Vmax × [H⁺]intracellular / ([H⁺]intracellular + Km)</div>
+              <p>By lowering extracellular [H⁺] (raising pH), the denominator decreases and net flux increases. The practical result: the muscle can sustain higher glycolytic rates for longer before reaching the intracellular pH threshold that impairs contractile function.</p>
+              <p><strong>Intracellular buffering systems:</strong> Phosphocreatine (first line), bicarbonate (limited intracellular), protein histidine residues (carnosine), and inorganic phosphate all contribute. Bicarbonate loading augments only the extracellular component — it does not directly change intracellular buffer capacity. This is why it complements rather than replaces beta-alanine (which raises intracellular carnosine).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LAYER 4 — WESTERBLAD CHALLENGE -->
+        <div class="layer-content" id="l4">
+          <p style="font-size:13px; color:var(--text-mid); line-height:1.7; margin-bottom:20px;">The bicarbonate consensus rests on the H⁺ fatigue hypothesis. Westerblad's work from Karolinska Institute challenges this at the mechanistic level.</p>
+
+          <div class="toggle-row">
+            <button class="toggle-btn" id="westBtn" onclick="toggleWesterblad()">Show Westerblad challenge</button>
+            <span class="toggle-label">Tap to reveal the competing fatigue mechanism</span>
+          </div>
+
+          <div class="canvas-wrap">
+            <canvas id="westCanvas"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent)"></div>H⁺ accumulation (consensus mechanism)</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--purple)"></div>Inorganic phosphate [Pi] rise</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent2)"></div>Ca²⁺ transient amplitude (decline)</div>
+          </div>
+
+          <div class="westerblad-panel" id="westPanel">
+            <div class="westerblad-title">// The Westerblad Challenge — Karolinska Institute</div>
+            <div class="westerblad-text">Hakan Westerblad's lab demonstrated that during repeated high-frequency stimulation, force decline correlates more strongly with <strong>inorganic phosphate [Pi] accumulation</strong> and <strong>Ca²⁺ transient amplitude reduction</strong> than with H⁺ concentration per se. The mechanism:</div>
+            <div class="particle-row" style="justify-content:flex-start; margin-bottom: 12px;">
+              <div class="particle pi">Pi</div>
+              <span style="font-size:12px; color:var(--text-mid); line-height:20px; margin-left:8px">Pi enters sarcoplasmic reticulum → precipitates with Ca²⁺ as Ca₂(Pi) → reduces Ca²⁺ available for troponin binding → force declines independently of pH</span>
+            </div>
+            <div class="westerblad-text">Additionally, reduced Ca²⁺ sensitivity of contractile proteins under acidic conditions (the original H⁺ hypothesis) has been shown to be largely reversed at physiological temperatures (~37°C) — meaning the H⁺-inhibition effect seen in <em>in vitro</em> studies at room temperature may not translate fully to living muscle during exercise.</div>
+            <div class="westerblad-verdict">
+              <strong>What this means for bicarbonate:</strong> If Pi accumulation and Ca²⁺ handling are the dominant fatigue drivers, bicarbonate loading — which targets H⁺ — may be addressing a secondary mechanism. This does not mean bicarbonate has no effect; it means the precise mechanistic explanation used to justify it may be incomplete. The performance data is real. The mechanism is contested. Practitioners should hold the theoretical rationale loosely.
+            </div>
+          </div>
+          <div class="deep-dive" style="margin-top:16px">
+            <button class="deep-dive-toggle" onclick="toggleDeep('dd4')">// Deep dive: Temperature-dependence & the H⁺ controversy ▾</button>
+            <div class="deep-dive-content" id="dd4">
+              <p>The H⁺ fatigue hypothesis dates to classic work by Fabiato & Fabiato (1978) and Donaldson & Hermansen (1978), showing that acidified solutions impaired Ca²⁺ sensitivity of isolated myofibrils. These studies were done at 12–22°C.</p>
+              <p>Westerblad and colleagues showed that at physiological temperature (35–37°C), the inhibitory effect of H⁺ on Ca²⁺ sensitivity is substantially reduced. The crossbridge kinetics change: the Q10 (temperature coefficient) means that what is true at 15°C is not necessarily true at 37°C. This complicates the foundational mechanistic argument.</p>
+              <p>In contrast, <strong>inorganic phosphate</strong> — released during ATP hydrolysis and PCr degradation — does not show the same temperature-dependence. Pi inhibits crossbridge cycling and directly precipitates Ca²⁺ in the SR lumen. The Pi mechanism appears more robust across temperature ranges.</p>
+              <p>The current mechanistic picture: fatigue in high-intensity exercise is likely <strong>multifactorial</strong>. H⁺ contributes, but is not the sole or even dominant driver. Pi and Ca²⁺ handling are co-equal or superior mechanisms. Bicarbonate addresses the extracellular H⁺ component, which remains a real contributor — just perhaps not as primary as the original theory assumed.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ══════════════════════════════════════════════════════════
+       MODEL 2 — ELITE SWIMMER RACE SIMULATION
+  ══════════════════════════════════════════════════════════ -->
+  <div class="model-block">
+    <div class="model-label">// Model 02</div>
+    <h2 class="model-title">Elite Swimmer<br><em>Race Simulation</em></h2>
+    <p class="model-desc">Configure your athlete, select an event, then activate NaHCO₃ to see the lap-by-lap physiological and performance effect in real time.</p>
+
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-dot orange"></div>
+        <div class="panel-title">Athlete Configuration & Race Model</div>
+      </div>
+      <div class="panel-body">
+
+        <!-- ATHLETE SLIDERS -->
+        <div class="athlete-config">
+          <div class="ctrl-group">
+            <div class="ctrl-label">Body weight (kg)</div>
+            <input type="range" id="bw" min="50" max="100" value="75" oninput="updateAthlete()">
+            <div class="ctrl-value" id="bwVal">75 kg</div>
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label">VO₂max (ml/kg/min)</div>
+            <input type="range" id="vo2" min="55" max="80" value="72" oninput="updateAthlete()">
+            <div class="ctrl-value" id="vo2Val">72 ml/kg/min</div>
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label">Training age (years elite)</div>
+            <input type="range" id="tage" min="2" max="15" value="8" oninput="updateAthlete()">
+            <div class="ctrl-value" id="tageVal">8 years elite</div>
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label">Event</div>
+            <select id="event" onchange="updateAthlete(); resetRace()">
+              <option value="200free">200m Freestyle</option>
+              <option value="400free">400m Freestyle</option>
+              <option value="200im">200m Individual Medley</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label">GI tolerance profile</div>
+            <select id="gitol" onchange="updateAthlete()">
+              <option value="good">Good (low risk)</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="poor">Poor (high risk)</option>
+            </select>
+          </div>
+          <div class="ctrl-group">
+            <div class="ctrl-label">Individualization status</div>
+            <select id="indiv" onchange="updateAthlete()">
+              <option value="yes" selected>Trialled & timed</option>
+              <option value="no">First time use</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- ATHLETE SUMMARY CHIPS -->
+        <div class="stat-strip" style="margin-bottom:24px">
+          <div class="stat-chip">
+            <div class="stat-chip-label">NaHCO₃ dose</div>
+            <div class="stat-chip-val" id="chipDose">22.5g</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Expected gain</div>
+            <div class="stat-chip-val green" id="chipGain">~1.2%</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">GI failure risk</div>
+            <div class="stat-chip-val orange" id="chipGI">Moderate</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Buffering profile</div>
+            <div class="stat-chip-val" id="chipBuff">High trained</div>
+          </div>
+        </div>
+
+        <!-- ACTIVATE BUTTON -->
+        <button class="activate-btn" id="activateBtn" onclick="startRace()">
+          <div class="btn-dot" id="btnDot"></div>
+          <span id="btnText">⚡ ACTIVATE NaHCO₃ — RUN RACE SIMULATION</span>
+        </button>
+
+        <!-- RACE CANVAS — pH/Lactate curves -->
+        <div class="race-panel">
+          <div class="race-panel-title">// Physiological Trace — pH & Blood Lactate by Lap</div>
+          <div class="race-canvas-wrap">
+            <canvas id="racePhCanvas"></canvas>
+          </div>
+          <div class="legend">
+            <div class="legend-item"><div class="legend-line" style="background:var(--danger)"></div>pH — No NaHCO₃</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent)"></div>pH — With NaHCO₃</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent4)"></div>Blood lactate (mmol/L) — No NaHCO₃</div>
+            <div class="legend-item"><div class="legend-line" style="background:var(--accent3)"></div>Blood lactate (mmol/L) — With NaHCO₃</div>
+          </div>
+        </div>
+
+        <!-- LAP TABLE -->
+        <div class="race-panel">
+          <div class="race-panel-title">// Lap Split Comparison</div>
+          <table class="lap-table" id="lapTable">
+            <thead>
+              <tr>
+                <th>Lap</th>
+                <th>Stroke / Leg</th>
+                <th>Split — No NaHCO₃</th>
+                <th>Split — With NaHCO₃</th>
+                <th>Δ</th>
+                <th>Mechanism</th>
+              </tr>
+            </thead>
+            <tbody id="lapBody">
+              <!-- populated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- FINAL STATS -->
+        <div class="stat-strip" id="finalStats" style="display:none">
+          <div class="stat-chip">
+            <div class="stat-chip-label">Total time — no bicarb</div>
+            <div class="stat-chip-val danger" id="finalNoB">—</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Total time — with bicarb</div>
+            <div class="stat-chip-val green" id="finalWithB">—</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Time saved</div>
+            <div class="stat-chip-val green" id="finalDiff">—</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">% improvement</div>
+            <div class="stat-chip-val green" id="finalPct">—</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Peak lactate — no bicarb</div>
+            <div class="stat-chip-val danger" id="finalLacNo">—</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-chip-label">Peak lactate — with bicarb</div>
+            <div class="stat-chip-val green" id="finalLacYes">—</div>
+          </div>
+        </div>
+
+        <!-- GI WARNING if poor tolerance + no trialling -->
+        <div id="giWarning" style="display:none; background:rgba(255,71,87,0.08); border:1px solid rgba(255,71,87,0.3); border-radius:10px; padding:16px 20px; margin-top:16px">
+          <div style="font-family:'DM Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--danger); margin-bottom:8px">// RISK FLAG</div>
+          <div style="font-size:13px; color:var(--text-mid); line-height:1.7" id="giWarningText"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="substack-cta">
+    <div class="substack-cta-eyebrow">// Chlorinated Chronicles</div>
+    <div class="substack-cta-title">More analysis like this,<br>straight to your <em>inbox</em></div>
+    <p class="substack-cta-desc">Sports governance, policy analysis, and swimming industry insights — written for coaches, scientists, and anyone who thinks seriously about the sport.</p>
+    <a href="https://swimed.substack.com/" target="_blank" class="substack-cta-btn">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.539 8.242H1.46V5.406h21.08v2.836zM1.46 10.812V24L12 18.11 22.54 24V10.812H1.46zM22.54 0H1.46v2.836h21.08V0z"/></svg>
+      Subscribe on Substack — it's free
+    </a>
+    <div class="substack-cta-note">Already a reader? <a href="https://swimed.substack.com/" target="_blank">swimed.substack.com</a> · No spam, unsubscribe anytime</div>
+  </div>
   </section>
 </div>
 
@@ -1706,6 +2843,8 @@ function enterApp() {
 
 // ── NAVIGATION ──
 function showSection(id, btn) {
+  // Init models canvases when models tab first opened
+  if (id === 'models') { setTimeout(initModels, 50); }
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
@@ -1892,6 +3031,923 @@ function showFinalResult(type, text) {
 // ── INIT ──
 renderResearchers();
 renderGaps();
+
+
+function initModels() {
+  if (window._modelsInitDone) return;
+  window._modelsInitDone = true;
+  document.querySelectorAll('canvas').forEach(c => resizeCanvas(c));
+  updateAbsorption();
+  updatepH();
+  drawWesterblad();
+  updateAthlete();
+  buildLapTable();
+  clearRaceCanvas();
+}
+
+// ══════════════════════════════════════
+// INTERACTIVE MODELS — JavaScript
+// ══════════════════════════════════════
+// ═══════════════════════════════════════════════════
+// UTILITY
+// ═══════════════════════════════════════════════════
+function resizeCanvas(canvas) {
+  const wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth;
+  canvas.height = wrap.clientHeight;
+}
+
+function showLayer(id, btn) {
+  document.querySelectorAll('.layer-content').forEach(l => l.classList.remove('active'));
+  document.querySelectorAll('.layer-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleDeep(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('show');
+}
+
+function fmt(n, decimals=2) {
+  return n.toFixed(decimals);
+}
+
+function fmtTime(s) {
+  const m = Math.floor(s/60);
+  const sec = (s % 60).toFixed(2);
+  return m > 0 ? `${m}:${sec < 10 ? '0' : ''}${sec}` : `${sec}s`;
+}
+
+// ═══════════════════════════════════════════════════
+// LAYER 1 — ABSORPTION KINETICS
+// ═══════════════════════════════════════════════════
+function updateAbsorption() {
+  const peakT = parseInt(document.getElementById('peakTime').value);
+  const dose = parseInt(document.getElementById('doseRange').value)/100;
+  const delivery = document.getElementById('delivery').value;
+
+  document.getElementById('peakTimeVal').textContent = peakT + ' min';
+  document.getElementById('doseVal').textContent = dose.toFixed(2) + ' g/kg';
+
+  // GI risk
+  const giMap = {
+    solution: { label: 'High', sub: 'Rapid osmotic load', cls: 'danger' },
+    capsule:  { label: 'Moderate', sub: 'Capsules reduce peak load', cls: 'orange' },
+    food:     { label: 'Low–Moderate', sub: 'Food slows absorption', cls: 'orange' },
+    split:    { label: 'Low', sub: 'Split dose spreads load', cls: 'green' }
+  };
+  const gi = giMap[delivery];
+  const giEl = document.getElementById('giRisk');
+  giEl.textContent = gi.label;
+  giEl.className = 'info-card-value ' + gi.cls;
+  document.getElementById('giRiskSub').textContent = gi.sub;
+
+  // Buffer increase based on dose
+  const bufPct = Math.round((dose / 0.3) * 22);
+  document.getElementById('bufferInc').textContent = '+' + bufPct + '%';
+
+  const peakConc = 24 + (dose / 0.3) * 5.4;
+  document.getElementById('peakConc').textContent = peakConc.toFixed(1);
+  document.getElementById('timeToPeak').textContent = peakT + ' min';
+
+  drawAbsorption(peakT, dose, delivery);
+}
+
+function drawAbsorption(peakT, dose, delivery) {
+  const canvas = document.getElementById('absCanvas');
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 30, right: 30, bottom: 50, left: 55 };
+  const gw = W - pad.left - pad.right;
+  const gh = H - pad.top - pad.bottom;
+  const totalTime = 240; // minutes on x-axis
+  const baseline = 24, maxConc = baseline + (dose/0.3)*5.4;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.top + (i/5)*gh;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left+gw, y); ctx.stroke();
+  }
+  for (let i = 0; i <= 6; i++) {
+    const x = pad.left + (i/6)*gw;
+    ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top+gh); ctx.stroke();
+  }
+
+  // Axes labels
+  ctx.fillStyle = '#6b7d8f';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'right';
+  const concRange = [20, 22, 24, 26, 28, 30, 32];
+  concRange.forEach((v,i) => {
+    const y = pad.top + gh - (v-20)/(32-20)*gh;
+    ctx.fillText(v, pad.left - 8, y + 3);
+  });
+  ctx.textAlign = 'center';
+  [0,40,80,120,160,200,240].forEach((v,i) => {
+    const x = pad.left + (v/totalTime)*gw;
+    ctx.fillText(v+'m', x, pad.top+gh+18);
+  });
+
+  // Axis labels
+  ctx.save();
+  ctx.translate(16, pad.top + gh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#9aacbc';
+  ctx.font = '11px Instrument Sans';
+  ctx.textAlign = 'center';
+  ctx.fillText('[HCO₃⁻] mmol/L', 0, 0);
+  ctx.restore();
+  ctx.fillStyle = '#9aacbc';
+  ctx.textAlign = 'center';
+  ctx.fillText('Time (minutes)', pad.left + gw/2, H - 8);
+
+  // toY helper
+  const toY = v => pad.top + gh - (v - 20)/(32-20)*gh;
+  const toX = t => pad.left + (t/totalTime)*gw;
+
+  // Baseline flat line
+  ctx.strokeStyle = 'rgba(168,255,120,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4,4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, toY(24));
+  ctx.lineTo(pad.left+gw, toY(24));
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Delivery factor (shape of curve)
+  const delayFactor = { solution: 0.7, capsule: 1.0, food: 1.2, split: 1.3 }[delivery];
+
+  // Bicarbonate curve (with dose)
+  ctx.strokeStyle = 'rgba(0,212,255,0.9)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  const pts = [];
+  for (let t = 0; t <= totalTime; t += 2) {
+    let conc;
+    const effPeak = peakT * delayFactor;
+    if (t < 10) {
+      conc = baseline;
+    } else {
+      const rise = Math.max(0, Math.min(1, (t - 10)/(effPeak - 10)));
+      const riseC = Math.pow(rise, 0.7);
+      let decay = 1;
+      if (t > effPeak) {
+        decay = Math.max(0.4, 1 - Math.pow((t-effPeak)/120, 0.8));
+      }
+      conc = baseline + (maxConc - baseline) * riseC * decay;
+    }
+    pts.push({t, conc});
+  }
+  pts.forEach((p, i) => {
+    const x = toX(p.t), y = toY(p.conc);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top+gh);
+  grad.addColorStop(0, 'rgba(0,212,255,0.15)');
+  grad.addColorStop(1, 'rgba(0,212,255,0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  pts.forEach((p, i) => {
+    const x = toX(p.t), y = toY(p.conc);
+    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.lineTo(toX(totalTime), toY(20));
+  ctx.lineTo(pad.left, toY(20));
+  ctx.closePath();
+  ctx.fill();
+
+  // Race window — vertical dashed lines (race might be at peakT ± 30 min)
+  const raceStart = parseInt(document.getElementById('peakTime').value) - 20;
+  const raceEnd = parseInt(document.getElementById('peakTime').value) + 20;
+  ctx.strokeStyle = 'rgba(255,107,53,0.7)';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([5,4]);
+  [raceStart, raceEnd].forEach(t => {
+    if (t > 0 && t < totalTime) {
+      ctx.beginPath();
+      ctx.moveTo(toX(t), pad.top);
+      ctx.lineTo(toX(t), pad.top+gh);
+      ctx.stroke();
+    }
+  });
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,107,53,0.6)';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText('Optimal race window', toX((raceStart+raceEnd)/2), pad.top + 14);
+
+  // Peak marker
+  const effPeakT = peakT * delayFactor;
+  const peakX = toX(Math.min(effPeakT, totalTime-5));
+  ctx.strokeStyle = 'rgba(0,212,255,0.4)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(peakX, pad.top+4);
+  ctx.lineTo(peakX, pad.top+gh);
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(0,212,255,0.9)';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'center';
+  ctx.fillText('peak', peakX, pad.top - 4);
+}
+
+// ═══════════════════════════════════════════════════
+// LAYER 2 — BLOOD pH
+// ═══════════════════════════════════════════════════
+function updatepH() {
+  const intensity = parseInt(document.getElementById('intensity').value);
+  const duration = parseInt(document.getElementById('duration').value);
+  document.getElementById('intensityVal').textContent = intensity + '%';
+  const durationLabels = ['','1 min','2 min (200m)','3 min','4 min (400m)','5 min','6 min','7 min','8 min'];
+  document.getElementById('durationVal').textContent = durationLabels[duration] || duration + ' min';
+
+  // Estimate final pH values
+  const fatigueRate = (intensity - 70) / 30; // 0-1
+  const phDrop = 0.15 + fatigueRate * 0.25 + (duration/8) * 0.18;
+  const phNoB = Math.max(6.90, 7.40 - phDrop);
+  const phWithB = Math.min(7.40, phNoB + 0.06 + fatigueRate * 0.04);
+
+  // Time above 7.10
+  const advantage = Math.round((phWithB - phNoB) / 0.008 * 3);
+
+  document.getElementById('phNoB').textContent = phNoB.toFixed(2);
+  document.getElementById('phNoB').className = 'info-card-value ' + (phNoB < 7.10 ? 'danger' : '');
+  document.getElementById('phWithB').textContent = phWithB.toFixed(2);
+  document.getElementById('phWithB').className = 'info-card-value ' + (phWithB > 7.10 ? '' : 'orange');
+  document.getElementById('timeAbove').textContent = '+' + Math.max(0, advantage) + ' sec';
+
+  drawpH(intensity, duration, phNoB, phWithB);
+}
+
+function drawpH(intensity, duration, phNoB, phWithB) {
+  const canvas = document.getElementById('phCanvas');
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 30, right: 30, bottom: 50, left: 55 };
+  const gw = W - pad.left - pad.right;
+  const gh = H - pad.top - pad.bottom;
+
+  // Grid
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.top + (i/5)*gh;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left+gw, y); ctx.stroke();
+  }
+  for (let i = 0; i <= 8; i++) {
+    const x = pad.left + (i/8)*gw;
+    ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top+gh); ctx.stroke();
+  }
+
+  const phMin = 6.85, phMax = 7.45;
+  const toY = v => pad.top + gh - (v - phMin)/(phMax - phMin)*gh;
+  const toX = t => pad.left + (t/duration)*gw;
+
+  // Axis labels
+  ctx.fillStyle = '#6b7d8f';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'right';
+  [6.9, 7.0, 7.1, 7.2, 7.3, 7.4].forEach(v => {
+    ctx.fillText(v.toFixed(1), pad.left-8, toY(v)+3);
+  });
+  ctx.textAlign = 'center';
+  for (let i = 0; i <= 8; i++) {
+    const t = i/8 * duration;
+    ctx.fillText(t.toFixed(1)+'m', pad.left+(i/8)*gw, pad.top+gh+18);
+  }
+  ctx.save();
+  ctx.translate(14, pad.top+gh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#9aacbc';
+  ctx.font = '11px Instrument Sans';
+  ctx.textAlign = 'center';
+  ctx.fillText('Blood pH', 0, 0);
+  ctx.restore();
+
+  // Fatigue threshold line
+  ctx.strokeStyle = 'rgba(255,211,42,0.5)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([6,4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, toY(7.10));
+  ctx.lineTo(pad.left+gw, toY(7.10));
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(255,211,42,0.7)';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'left';
+  ctx.fillText('fatigue threshold ~7.10', pad.left+6, toY(7.10)-5);
+
+  // Generate curves
+  const steps = 100;
+  const fatigueRate = (parseInt(document.getElementById('intensity').value) - 70) / 30;
+
+  function getPts(withBicarb) {
+    const pts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = (i/steps)*duration;
+      const progress = t/duration;
+      const startPH = withBicarb ? 7.42 : 7.38;
+      const endPH = withBicarb ? phWithB : phNoB;
+      // S-curve decline
+      const drop = 1 / (1 + Math.exp(-8*(progress - 0.4)));
+      const ph = startPH - (startPH - endPH) * drop;
+      pts.push({t, ph});
+    }
+    return pts;
+  }
+
+  // No bicarb — red
+  const ptsNo = getPts(false);
+  ctx.strokeStyle = 'rgba(255,71,87,0.9)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ptsNo.forEach((p,i) => {
+    if (i===0) ctx.moveTo(toX(p.t), toY(p.ph));
+    else ctx.lineTo(toX(p.t), toY(p.ph));
+  });
+  ctx.stroke();
+
+  // With bicarb — cyan
+  const ptsWith = getPts(true);
+  ctx.strokeStyle = 'rgba(0,212,255,0.9)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ptsWith.forEach((p,i) => {
+    if (i===0) ctx.moveTo(toX(p.t), toY(p.ph));
+    else ctx.lineTo(toX(p.t), toY(p.ph));
+  });
+  ctx.stroke();
+
+  // Gradient fill between curves
+  const gradFill = ctx.createLinearGradient(0, 0, 0, H);
+  gradFill.addColorStop(0, 'rgba(0,212,255,0.08)');
+  gradFill.addColorStop(1, 'rgba(0,212,255,0.01)');
+  ctx.fillStyle = gradFill;
+  ctx.beginPath();
+  ptsWith.forEach((p,i) => {
+    if(i===0) ctx.moveTo(toX(p.t), toY(p.ph));
+    else ctx.lineTo(toX(p.t), toY(p.ph));
+  });
+  for(let i=ptsNo.length-1; i>=0; i--) {
+    ctx.lineTo(toX(ptsNo[i].t), toY(ptsNo[i].ph));
+  }
+  ctx.closePath();
+  ctx.fill();
+}
+
+// ═══════════════════════════════════════════════════
+// LAYER 4 — WESTERBLAD
+// ═══════════════════════════════════════════════════
+let westActive = false;
+function toggleWesterblad() {
+  westActive = !westActive;
+  const btn = document.getElementById('westBtn');
+  const panel = document.getElementById('westPanel');
+  if (westActive) {
+    btn.textContent = 'Hide Westerblad challenge';
+    btn.classList.add('active-purple');
+    panel.classList.add('show');
+  } else {
+    btn.textContent = 'Show Westerblad challenge';
+    btn.classList.remove('active-purple');
+    panel.classList.remove('show');
+  }
+  drawWesterblad();
+}
+
+function drawWesterblad() {
+  const canvas = document.getElementById('westCanvas');
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = { top: 30, right: 30, bottom: 50, left: 55 };
+  const gw = W - pad.left - pad.right;
+  const gh = H - pad.top - pad.bottom;
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.top + (i/5)*gh;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left+gw, y); ctx.stroke();
+  }
+  for (let i = 0; i <= 8; i++) {
+    const x = pad.left + (i/8)*gw;
+    ctx.beginPath(); ctx.moveTo(x, pad.top); ctx.lineTo(x, pad.top+gh); ctx.stroke();
+  }
+
+  const steps = 100;
+  const toX = t => pad.left + (t/steps)*gw;
+  const toYNorm = (v, min, max) => pad.top + gh - (v-min)/(max-min)*gh;
+
+  // H+ accumulation (normalized 0-1)
+  const hpts = [];
+  for (let i = 0; i <= steps; i++) {
+    const t = i/steps;
+    hpts.push(Math.pow(t, 0.8));
+  }
+
+  ctx.strokeStyle = 'rgba(0,212,255,0.85)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  hpts.forEach((v,i) => {
+    const x = toX(i);
+    const y = toYNorm(v, 0, 1.2);
+    if (i===0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+  });
+  ctx.stroke();
+
+  if (westActive) {
+    // Pi accumulation
+    const pipts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i/steps;
+      pipts.push(Math.pow(t, 0.65) * 1.1);
+    }
+    ctx.strokeStyle = 'rgba(192,132,252,0.85)';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    pipts.forEach((v,i) => {
+      const x = toX(i);
+      const y = toYNorm(v, 0, 1.2);
+      if (i===0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Ca2+ transient decline
+    const capts = [];
+    for (let i = 0; i <= steps; i++) {
+      const t = i/steps;
+      capts.push(1.0 - Math.pow(t, 0.7) * 0.85);
+    }
+    ctx.strokeStyle = 'rgba(255,107,53,0.85)';
+    ctx.lineWidth = 2;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    capts.forEach((v,i) => {
+      const x = toX(i);
+      const y = toYNorm(v, 0, 1.2);
+      if (i===0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // annotation
+    ctx.fillStyle = 'rgba(192,132,252,0.8)';
+    ctx.font = '11px DM Mono';
+    ctx.textAlign = 'right';
+    ctx.fillText('[Pi] rivals H⁺ as fatigue driver', pad.left+gw-4, pad.top+30);
+    ctx.fillStyle = 'rgba(255,107,53,0.8)';
+    ctx.fillText('Ca²⁺ decline — SR Pi precipitation', pad.left+gw-4, pad.top+48);
+  }
+
+  // Axis labels
+  ctx.fillStyle = '#6b7d8f';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'center';
+  ['0%', '12%', '25%', '37%', '50%', '62%', '75%', '87%', '100%'].forEach((v,i) => {
+    ctx.fillText(v, toX(i*100/8), pad.top+gh+18);
+  });
+  ctx.fillText('% of race duration →', pad.left+gw/2, H-5);
+  ctx.save();
+  ctx.translate(14, pad.top+gh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = '#9aacbc';
+  ctx.font = '11px Instrument Sans';
+  ctx.textAlign = 'center';
+  ctx.fillText('Normalized signal (a.u.)', 0, 0);
+  ctx.restore();
+}
+
+// ═══════════════════════════════════════════════════
+// MODEL 2 — RACE SIMULATION
+// ═══════════════════════════════════════════════════
+const EVENT_DATA = {
+  '200free': {
+    laps: [
+      { label: '50m (1)', stroke: 'Freestyle', mechanism: 'PCr + glycolysis onset, blood pH stable ~7.38' },
+      { label: '50m (2)', stroke: 'Freestyle', mechanism: 'Glycolytic flux rising, H⁺ beginning to build' },
+      { label: '50m (3)', stroke: 'Freestyle', mechanism: 'H⁺ buffering critical — main NaHCO₃ window' },
+      { label: '50m (4)', stroke: 'Freestyle', mechanism: 'Fatigue resistance determines final push' },
+    ],
+    baseSplits: [26.0, 28.5, 30.2, 31.8],
+    bicarBenefit: [0, 0.05, 0.45, 0.72],
+  },
+  '400free': {
+    laps: [
+      { label: '50m (1)', stroke: 'Freestyle', mechanism: 'Aerobic onset, PCr contribution, pH stable' },
+      { label: '50m (2)', stroke: 'Freestyle', mechanism: 'Glycolysis ramping, lactate beginning to rise' },
+      { label: '50m (3)', stroke: 'Freestyle', mechanism: 'H⁺ buffering engaged — NaHCO₃ begins working' },
+      { label: '50m (4)', stroke: 'Freestyle', mechanism: 'Critical window: buffering advantage widens' },
+      { label: '50m (5)', stroke: 'Freestyle', mechanism: 'Lactate plateau — buffering difference maximal' },
+      { label: '50m (6)', stroke: 'Freestyle', mechanism: 'Fatigue acceleration without bicarb' },
+      { label: '50m (7)', stroke: 'Freestyle', mechanism: 'Final approach — accumulated H⁺ advantage clear' },
+      { label: '50m (8)', stroke: 'Freestyle', mechanism: 'Sprint finish — H⁺ tolerance determines output' },
+    ],
+    baseSplits: [29.2, 31.0, 31.8, 32.2, 32.6, 33.0, 32.8, 33.2],
+    bicarBenefit: [0, 0.03, 0.15, 0.25, 0.35, 0.45, 0.42, 0.35],
+  },
+  '200im': {
+    laps: [
+      { label: '50m Fly', stroke: 'Butterfly', mechanism: 'Fly — high demand, PCr dominant, pH stable' },
+      { label: '50m Back', stroke: 'Backstroke', mechanism: 'Back — lactate rising, H⁺ beginning to accumulate' },
+      { label: '50m Breast', stroke: 'Breaststroke', mechanism: 'Breast — H⁺ peaks, bicarb buffering maximally active' },
+      { label: '50m Free', stroke: 'Freestyle', mechanism: 'Free finish — H⁺ tolerance determines final time' },
+    ],
+    baseSplits: [27.5, 32.5, 38.0, 29.5],
+    bicarBenefit: [0, 0.12, 0.60, 0.45],
+  },
+};
+
+let raceState = 'idle'; // idle | running | done
+let raceInterval = null;
+let currentLap = 0;
+let raceData = null;
+
+function updateAthlete() {
+  const bw = parseInt(document.getElementById('bw').value);
+  const vo2 = parseInt(document.getElementById('vo2').value);
+  const tage = parseInt(document.getElementById('tage').value);
+  const gitol = document.getElementById('gitol').value;
+  const indiv = document.getElementById('indiv').value;
+
+  document.getElementById('bwVal').textContent = bw + ' kg';
+  document.getElementById('vo2Val').textContent = vo2 + ' ml/kg/min';
+  document.getElementById('tageVal').textContent = tage + ' years elite';
+
+  const dose = (bw * 0.3).toFixed(1);
+  document.getElementById('chipDose').textContent = dose + 'g';
+
+  // Expected gain: elite swimmers with more training age have higher buffering → less benefit
+  const baseGain = 1.4;
+  const eliteReduction = Math.max(0, (tage - 4) * 0.05);
+  const vo2Factor = vo2 > 72 ? 0.9 : 1.0;
+  const gain = Math.max(0.5, (baseGain - eliteReduction) * vo2Factor);
+  document.getElementById('chipGain').textContent = '~' + gain.toFixed(1) + '%';
+
+  const giMap = { good: { label: 'Low', cls: 'green' }, moderate: { label: 'Moderate', cls: 'orange' }, poor: { label: 'High', cls: 'danger' } };
+  const gi = giMap[gitol];
+  const giChip = document.getElementById('chipGI');
+  giChip.textContent = gi.label;
+  giChip.className = 'stat-chip-val ' + gi.cls;
+
+  const buffLabel = tage >= 10 ? 'Highly trained' : tage >= 6 ? 'High trained' : 'Developing';
+  document.getElementById('chipBuff').textContent = buffLabel;
+
+  // GI warning
+  const warning = document.getElementById('giWarning');
+  const warningText = document.getElementById('giWarningText');
+  if (gitol === 'poor' && indiv === 'no') {
+    warning.style.display = 'block';
+    warningText.textContent = 'High GI risk + first-time use = race day catastrophe risk. This is exactly the scenario Bob Bowman describes: "He ran to the bathroom before the 200 free final." Do not deploy bicarbonate in competition without individualized timing trials. The simulation below shows potential benefit — in practice, this athlete has substantial probability of GI failure that eliminates any gain.';
+  } else if (gitol === 'poor') {
+    warning.style.display = 'block';
+    warningText.textContent = 'Poor GI tolerance even with trialling. Consider enteric-coated capsules and split dosing. Benefits shown are theoretical maximums — actual race benefit may be significantly reduced or eliminated by GI distress.';
+  } else if (indiv === 'no') {
+    warning.style.display = 'block';
+    warningText.textContent = 'No individualized timing trials completed. Bowman\'s "dart throw" scenario. Benefits are statistical averages — this athlete\'s actual time-to-peak is unknown and could mean competing in a declining alkalotic state.';
+  } else {
+    warning.style.display = 'none';
+  }
+}
+
+function resetRace() {
+  raceState = 'idle';
+  currentLap = 0;
+  if (raceInterval) { clearInterval(raceInterval); raceInterval = null; }
+  const btn = document.getElementById('activateBtn');
+  btn.className = 'activate-btn';
+  document.getElementById('btnDot').style.background = 'var(--accent)';
+  document.getElementById('btnText').textContent = '⚡ ACTIVATE NaHCO₃ — RUN RACE SIMULATION';
+  document.getElementById('finalStats').style.display = 'none';
+  buildLapTable();
+  clearRaceCanvas();
+}
+
+function buildLapTable() {
+  const event = document.getElementById('event').value;
+  const data = EVENT_DATA[event];
+  const laps = data.laps;
+  const tbody = document.getElementById('lapBody');
+  tbody.innerHTML = laps.map((lap, i) => `
+    <tr id="lapRow${i}">
+      <td>${lap.label}</td>
+      <td>${lap.stroke}</td>
+      <td class="time-no" id="splitNo${i}">—</td>
+      <td class="time-yes" id="splitYes${i}">—</td>
+      <td class="diff-zero" id="splitDiff${i}">—</td>
+      <td style="font-size:11px; color:var(--text-dim)">${lap.mechanism}</td>
+    </tr>
+  `).join('');
+}
+
+function clearRaceCanvas() {
+  const canvas = document.getElementById('racePhCanvas');
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawRaceAxes(ctx, canvas.width, canvas.height, 0);
+}
+
+function drawRaceAxes(ctx, W, H, nLaps) {
+  const pad = { top: 24, right: 24, bottom: 44, left: 50 };
+  const gw = W - pad.left - pad.right;
+  const gh = H - pad.top - pad.bottom;
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 5; i++) {
+    const y = pad.top + (i/5)*gh;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left+gw, y); ctx.stroke();
+  }
+
+  // Axis labels
+  ctx.fillStyle = '#6b7d8f';
+  ctx.font = '10px DM Mono';
+  ctx.textAlign = 'right';
+  const phVals = [6.95, 7.05, 7.15, 7.25, 7.35];
+  phVals.forEach(v => {
+    const y = pad.top + gh - (v-6.9)/(7.45-6.9)*gh;
+    ctx.fillText(v.toFixed(2), pad.left-6, y+3);
+  });
+
+  // Right axis: lactate scale
+  ctx.fillStyle = 'rgba(255,211,42,0.6)';
+  ctx.textAlign = 'left';
+  [0, 5, 10, 15, 20].forEach(v => {
+    const y = pad.top + gh - (v/24)*gh;
+    ctx.fillText(v, W-pad.right+6, y+3);
+  });
+
+  ctx.fillStyle = '#9aacbc';
+  ctx.textAlign = 'center';
+  ctx.font = '11px Instrument Sans';
+  ctx.fillText('Lap →', pad.left+gw/2, H-5);
+  ctx.save();
+  ctx.translate(13, pad.top+gh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('pH', 0, 0);
+  ctx.restore();
+  ctx.save();
+  ctx.translate(W-10, pad.top+gh/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillStyle = 'rgba(255,211,42,0.7)';
+  ctx.fillText('Lactate mmol/L', 0, 0);
+  ctx.restore();
+}
+
+function startRace() {
+  if (raceState === 'running') return;
+
+  raceState = 'running';
+  currentLap = 0;
+
+  const btn = document.getElementById('activateBtn');
+  btn.className = 'activate-btn running';
+  document.getElementById('btnText').textContent = '▶ SIMULATING RACE...';
+  document.getElementById('finalStats').style.display = 'none';
+
+  const event = document.getElementById('event').value;
+  const bw = parseInt(document.getElementById('bw').value);
+  const tage = parseInt(document.getElementById('tage').value);
+  const vo2 = parseInt(document.getElementById('vo2').value);
+  const gitol = document.getElementById('gitol').value;
+  const indiv = document.getElementById('indiv').value;
+
+  const baseGain = 1.4;
+  const eliteReduction = Math.max(0, (tage - 4) * 0.05);
+  const vo2Factor = vo2 > 72 ? 0.9 : 1.0;
+  const gainPct = Math.max(0.5, (baseGain - eliteReduction) * vo2Factor);
+
+  // GI penalty
+  let giPenalty = 0;
+  if (gitol === 'poor' && indiv === 'no') giPenalty = 0.015;
+  else if (gitol === 'poor') giPenalty = 0.005;
+  else if (indiv === 'no') giPenalty = 0.005;
+
+  const data = EVENT_DATA[event];
+  const baseSplits = [...data.baseSplits];
+  const benefits = [...data.bicarBenefit];
+
+  // Adjust baseSplits by athlete profile (vo2, tage)
+  const speedFactor = (0.8 + (vo2-55)/25 * 0.2) * (0.9 + tage/15*0.1);
+  const adjustedBase = baseSplits.map(s => s / speedFactor);
+
+  const withBicarb = adjustedBase.map((s, i) => {
+    // benefit[i] is a weight (0–1); total gain is gainPct% of total race time, distributed by weight
+    const totalBase = adjustedBase.reduce((a,b) => a+b, 0);
+    const totalSaving = totalBase * (gainPct / 100);
+    const totalWeight = benefits.reduce((a,b) => a+b, 0) || 1;
+    const lapSaving = totalSaving * (benefits[i] / totalWeight);
+    const penalised = s + (giPenalty * s); // GI penalty adds time
+    return penalised - lapSaving;
+  });
+
+  // Pre-compute physiology
+  const nLaps = adjustedBase.length;
+  function phCurve(withB) {
+    return adjustedBase.map((_, i) => {
+      const prog = i / (nLaps - 1);
+      const start = withB ? 7.42 : 7.38;
+      const end = withB ? 7.12 : 7.05;
+      return start - (start-end) * Math.pow(prog, 0.6);
+    });
+  }
+  function lacCurve(withB) {
+    return adjustedBase.map((_, i) => {
+      const prog = (i+1)/nLaps;
+      const peak = withB ? 14.5 : 12.8;
+      return 2 + peak * Math.pow(prog, 0.7);
+    });
+  }
+
+  const phNo = phCurve(false), phYes = phCurve(true);
+  const lacNo = lacCurve(false), lacYes = lacCurve(true);
+
+  raceData = { adjustedBase, withBicarb, phNo, phYes, lacNo, lacYes, nLaps };
+
+  clearRaceCanvas();
+  buildLapTable();
+
+  raceInterval = setInterval(() => {
+    if (currentLap >= nLaps) {
+      clearInterval(raceInterval);
+      raceInterval = null;
+      raceState = 'done';
+
+      const btn = document.getElementById('activateBtn');
+      btn.className = 'activate-btn done';
+      document.getElementById('btnText').textContent = '✓ SIMULATION COMPLETE — CLICK TO RESET';
+      btn.onclick = () => { resetRace(); btn.onclick = startRace; };
+
+      const totalNo = adjustedBase.reduce((a,b)=>a+b,0);
+      const totalYes = withBicarb.reduce((a,b)=>a+b,0);
+      const diff = totalNo - totalYes;
+      const pct = (diff / totalNo * 100);
+
+      document.getElementById('finalStats').style.display = 'flex';
+      document.getElementById('finalNoB').textContent = fmtTime(totalNo);
+      document.getElementById('finalWithB').textContent = fmtTime(totalYes);
+      document.getElementById('finalDiff').textContent = diff.toFixed(2) + 's';
+      document.getElementById('finalPct').textContent = pct.toFixed(2) + '%';
+      document.getElementById('finalLacNo').textContent = lacNo[nLaps-1].toFixed(1) + ' mmol/L';
+      document.getElementById('finalLacYes').textContent = lacYes[nLaps-1].toFixed(1) + ' mmol/L';
+      return;
+    }
+
+    const i = currentLap;
+
+    // Update lap table row
+    const rowEl = document.getElementById('lapRow' + i);
+    if (rowEl) rowEl.classList.add('active');
+
+    document.getElementById('splitNo' + i).textContent = fmtTime(adjustedBase[i]);
+    document.getElementById('splitYes' + i).textContent = fmtTime(withBicarb[i]);
+    const diff = adjustedBase[i] - withBicarb[i];
+    const diffEl = document.getElementById('splitDiff' + i);
+    if (diff > 0.02) {
+      diffEl.textContent = '−' + diff.toFixed(2) + 's';
+      diffEl.className = 'diff-pos';
+    } else if (diff < -0.02) {
+      diffEl.textContent = '+' + Math.abs(diff).toFixed(2) + 's';
+      diffEl.className = 'diff-neg';
+    } else {
+      diffEl.textContent = '≈ 0';
+      diffEl.className = 'diff-zero';
+    }
+
+    // Draw progressive race canvas
+    drawRaceProgress(i+1);
+    currentLap++;
+  }, 600);
+}
+
+function drawRaceProgress(revealedLaps) {
+  const canvas = document.getElementById('racePhCanvas');
+  resizeCanvas(canvas);
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  if (!raceData) return;
+
+  const { phNo, phYes, lacNo, lacYes, nLaps } = raceData;
+  const pad = { top: 24, right: 50, bottom: 44, left: 50 };
+  const gw = W - pad.left - pad.right;
+  const gh = H - pad.top - pad.bottom;
+
+  drawRaceAxes(ctx, W, H, nLaps);
+
+  const toX = i => pad.left + (i/(nLaps-1 || 1)) * gw;
+  const toYpH = v => pad.top + gh - (v-6.9)/(7.45-6.9)*gh;
+  const toYLac = v => pad.top + gh - (v/24)*gh;
+
+  // Lap tick marks
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < nLaps; i++) {
+    const x = toX(i);
+    ctx.beginPath(); ctx.moveTo(x, pad.top+gh); ctx.lineTo(x, pad.top+gh+6); ctx.stroke();
+    ctx.fillStyle = '#6b7d8f';
+    ctx.font = '9px DM Mono';
+    ctx.textAlign = 'center';
+    ctx.fillText((i+1), x, pad.top+gh+18);
+  }
+
+  const n = Math.min(revealedLaps, nLaps);
+
+  // Lactate — no bicarb
+  if (n >= 2) {
+    ctx.strokeStyle = 'rgba(255,211,42,0.6)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      if (i===0) ctx.moveTo(toX(i), toYLac(lacNo[i])); else ctx.lineTo(toX(i), toYLac(lacNo[i]));
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // Lactate — with bicarb
+  if (n >= 2) {
+    ctx.strokeStyle = 'rgba(168,255,120,0.6)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    for (let i = 0; i < n; i++) {
+      if (i===0) ctx.moveTo(toX(i), toYLac(lacYes[i])); else ctx.lineTo(toX(i), toYLac(lacYes[i]));
+    }
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  // pH — no bicarb (red)
+  ctx.strokeStyle = 'rgba(255,71,87,0.85)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    if (i===0) ctx.moveTo(toX(i), toYpH(phNo[i])); else ctx.lineTo(toX(i), toYpH(phNo[i]));
+  }
+  ctx.stroke();
+
+  // pH — with bicarb (cyan)
+  ctx.strokeStyle = 'rgba(0,212,255,0.9)';
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let i = 0; i < n; i++) {
+    if (i===0) ctx.moveTo(toX(i), toYpH(phYes[i])); else ctx.lineTo(toX(i), toYpH(phYes[i]));
+  }
+  ctx.stroke();
+
+  // Data points
+  for (let i = 0; i < n; i++) {
+    // pH dots
+    ctx.fillStyle = i === n-1 ? 'rgba(255,71,87,1)' : 'rgba(255,71,87,0.6)';
+    ctx.beginPath(); ctx.arc(toX(i), toYpH(phNo[i]), i===n-1?5:3, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = i === n-1 ? 'rgba(0,212,255,1)' : 'rgba(0,212,255,0.6)';
+    ctx.beginPath(); ctx.arc(toX(i), toYpH(phYes[i]), i===n-1?5:3, 0, Math.PI*2); ctx.fill();
+  }
+
+  // Fatigue threshold
+  ctx.strokeStyle = 'rgba(255,211,42,0.35)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([5,4]);
+  ctx.beginPath();
+  ctx.moveTo(pad.left, toYpH(7.10));
+  ctx.lineTo(pad.left+gw, toYpH(7.10));
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+// Models init deferred until Models tab is opened (see showSection)
+
+window.addEventListener('resize', () => {
+  if (!window._modelsInitDone) return;
+  updateAbsorption();
+  updatepH();
+  drawWesterblad();
+  if (raceData) drawRaceProgress(currentLap);
+  else clearRaceCanvas();
+});
 </script>
 </body>
 </html>
